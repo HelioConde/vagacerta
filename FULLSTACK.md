@@ -44,9 +44,13 @@ Dados privados são protegidos por RLS.
 - importação de vaga por URL quando houver integração permitida;
 - IA somente via backend/Edge Function.
 
+## Idiomas
+
+PT-BR é o idioma principal. Inglês deve estar disponível em toda a interface, preservando os mesmos recursos e dados.
+
 ## Monetização
 
-Freemium; premium para currículos personalizados, histórico avançado, preparação de entrevistas e automações.
+O produto é preparado para monetização por anúncios. Os espaços publicitários devem ficar fora das ações críticas do funil e nunca bloquear cadastro, leitura, edição, autenticação ou mudança de status.
 
 ## QA obrigatório
 
