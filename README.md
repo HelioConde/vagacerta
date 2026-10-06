@@ -33,3 +33,11 @@ Abra `index.html` por um servidor HTTP local para testar. O deploy alvo é GitHu
 ## Arquitetura
 
 Veja `FULLSTACK.md` para regras de produto, QA, segurança e próximas etapas.
+
+## Idiomas e monetização
+
+- PT-BR é o idioma principal do produto.
+- A interface também deve oferecer inglês.
+- A preferência de idioma é persistida no navegador.
+- O modelo de monetização é baseado em anúncios não intrusivos.
+- Anúncios não devem interromper cadastro, edição, leitura ou mudança de status das candidaturas.
