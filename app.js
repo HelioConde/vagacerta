@@ -289,7 +289,7 @@ function cardHtml(item) {
           '<option value="' + value + '"' + (item.status === value ? ' selected' : '') + '>' + escapeHtml(statusText(data, 'short')) + '</option>'
         ).join('') +
       '</select></label>' +
-      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">" + tr('openJob') + "</a>' : '') +
+      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + tr('openJob') + '</a>' : '') +
     '</div>' +
   '</article>';
 }
