@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7f5">
+  <meta name="description" content="Organize candidaturas, acompanhe etapas, compatibilidade e próximos passos da sua busca por emprego.">
+  <meta property="og:title" content="VagaCerta — Organizador de candidaturas">
+  <meta property="og:description" content="Sua busca por emprego organizada em um painel simples e acionável.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://helioconde.github.io/vagacerta/">
+  <link rel="canonical" href="https://helioconde.github.io/vagacerta/">
+  <title>VagaCerta — Organizador de candidaturas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="./">VagaCerta<span>.</span></a>
+      <nav class="top-actions" aria-label="Conta">
+        <span id="sync-status" class="sync-status" role="status">Modo local</span>
+        <button id="account-open" class="button ghost" type="button">Entrar / sincronizar</button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">ORGANIZADOR DE CANDIDATURAS</p>
+          <h1>Menos vagas perdidas.<br><span>Mais próximos passos claros.</span></h1>
+          <p class="hero-copy">Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.</p>
+        </div>
+        <aside class="hero-stat">
+          <span>Em andamento</span>
+          <strong id="hero-active">0</strong>
+          <small>candidaturas ativas</small>
+        </aside>
+      </section>
+
+      <section class="toolbar" aria-label="Filtros de candidaturas">
+        <div class="search-wrap">
+          <label for="search">Buscar</label>
+          <input id="search" type="search" placeholder="Empresa, cargo ou anotação">
+        </div>
+        <div class="filter-wrap">
+          <label for="status-filter">Status</label>
+          <select id="status-filter">
+            <option value="">Todos</option>
+            <option value="saved">Salvas</option>
+            <option value="applied">Candidatadas</option>
+            <option value="interview">Entrevistas</option>
+            <option value="offer">Propostas</option>
+            <option value="rejected">Encerradas</option>
+          </select>
+        </div>
+        <button id="new-application" class="button primary" type="button">+ Nova candidatura</button>
+      </section>
+
+      <section class="metrics" aria-label="Resumo">
+        <article><span>Total</span><strong id="metric-total">0</strong></article>
+        <article><span>Candidatadas</span><strong id="metric-applied">0</strong></article>
+        <article><span>Entrevistas</span><strong id="metric-interviews">0</strong></article>
+        <article><span>Compatibilidade média</span><strong id="metric-score">—</strong></article>
+      </section>
+
+      <section class="board-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FUNIL DE CANDIDATURAS</p>
+            <h2>Onde cada vaga está agora</h2>
+          </div>
+          <p>Altere o status diretamente em cada card.</p>
+        </div>
+        <div id="board" class="board" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>VagaCerta</span>
+      <small>Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.</small>
+    </footer>
+  </div>
+
+  <dialog id="application-dialog" class="dialog" aria-labelledby="application-title">
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow">CANDIDATURA</p>
+        <h2 id="application-title">Adicionar oportunidade</h2>
+      </div>
+      <button class="icon-button" id="application-close" type="button" aria-label="Fechar">×</button>
+    </div>
+    <form id="application-form">
+      <input name="id" type="hidden">
+      <div class="form-grid">
+        <label class="field"><span>Empresa</span><input name="company" maxlength="120" required placeholder="Ex.: Empresa Aurora"></label>
+        <label class="field"><span>Cargo</span><input name="role" maxlength="160" required placeholder="Ex.: Front-End Júnior"></label>
+      </div>
+      <label class="field"><span>Link da vaga</span><input name="url" type="url" maxlength="1200" placeholder="https://..."></label>
+      <div class="form-grid three">
+        <label class="field"><span>Status</span>
+          <select name="status">
+            <option value="saved">Salva</option>
+            <option value="applied">Candidatada</option>
+            <option value="interview">Entrevista</option>
+            <option value="offer">Proposta</option>
+            <option value="rejected">Encerrada</option>
+          </select>
+        </label>
+        <label class="field"><span>Compatibilidade (%)</span><input name="matchScore" type="number" min="0" max="100" step="1" placeholder="Ex.: 82"></label>
+        <label class="field"><span>Pretensão / salário</span><input name="salary" maxlength="80" placeholder="Ex.: R$ 2.500 ou a combinar"></label>
+      </div>
+      <label class="field"><span>Próxima ação / anotações</span><textarea name="notes" maxlength="1500" placeholder="Ex.: revisar portfólio e fazer follow-up em 5 dias"></textarea></label>
+      <div class="dialog-actions">
+        <button id="delete-application" class="button danger" type="button" hidden>Excluir</button>
+        <span class="spacer"></span>
+        <button id="cancel-application" class="button ghost" type="button">Cancelar</button>
+        <button class="button primary" type="submit">Salvar candidatura</button>
+      </div>
+      <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+    </form>
+  </dialog>
+
+  <dialog id="account-dialog" class="dialog account-dialog" aria-labelledby="account-title">
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow">SUA CONTA</p>
+        <h2 id="account-title">Sincronize sua busca</h2>
+      </div>
+      <button class="icon-button" id="account-close" type="button" aria-label="Fechar">×</button>
+    </div>
+    <p class="dialog-copy">Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.</p>
+    <form id="auth-form">
+      <label class="field"><span>E-mail</span><input name="email" type="email" autocomplete="email" required></label>
+      <label class="field"><span>Senha</span><input name="password" type="password" minlength="8" autocomplete="current-password" required></label>
+      <button class="button primary full" type="submit">Entrar</button>
+      <div class="account-actions">
+        <button id="sign-up" class="button ghost" type="button">Criar conta</button>
+        <button id="reset-password" class="button text" type="button">Esqueci a senha</button>
+      </div>
+    </form>
+    <div id="account-profile" hidden>
+      <p>Conectado como <strong id="account-email"></strong></p>
+      <button id="import-local" class="button ghost full" type="button" hidden>Importar candidaturas deste dispositivo</button>
+      <button id="sign-out" class="button ghost full" type="button">Sair da conta</button>
+    </div>
+    <p id="account-message" class="form-message" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script>
+  <script src="live-update.js" defer></script>\n</body>
+</html>
