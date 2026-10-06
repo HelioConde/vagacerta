@@ -27,3 +27,8 @@ jobs:
           grep -qi 'src="supabase-config.js"' index.html
           ! grep -q 'ideias-ia-lab/02-vaga-certa' index.html
           ! grep -qi 'service_role' supabase-config.js
+          grep -q 'data-lang="pt-BR"' index.html
+          grep -q 'data-lang="en"' index.html
+          grep -q 'data-ad-slot="dashboard"' index.html
+          grep -q "vagacerta-lang" app.js
+          grep -q "currentLang" app.js
