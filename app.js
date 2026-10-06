@@ -1,13 +1,132 @@
 const supabaseClient = window.IDEIAS_SUPABASE?.client || null;
 const STORAGE_KEY = 'vagacerta-applications-v2';
 
+let currentLang = localStorage.getItem('vagacerta-lang') === 'en' ? 'en' : 'pt-BR';
+
 const STATUS = {
-  saved: { label: 'Salvas', short: 'Salva' },
-  applied: { label: 'Candidatadas', short: 'Candidatada' },
-  interview: { label: 'Entrevistas', short: 'Entrevista' },
-  offer: { label: 'Propostas', short: 'Proposta' },
-  rejected: { label: 'Encerradas', short: 'Encerrada' }
+  saved: { label: { 'pt-BR': 'Salvas', en: 'Saved' }, short: { 'pt-BR': 'Salva', en: 'Saved' } },
+  applied: { label: { 'pt-BR': 'Candidatadas', en: 'Applied' }, short: { 'pt-BR': 'Candidatada', en: 'Applied' } },
+  interview: { label: { 'pt-BR': 'Entrevistas', en: 'Interviews' }, short: { 'pt-BR': 'Entrevista', en: 'Interview' } },
+  offer: { label: { 'pt-BR': 'Propostas', en: 'Offers' }, short: { 'pt-BR': 'Proposta', en: 'Offer' } },
+  rejected: { label: { 'pt-BR': 'Encerradas', en: 'Closed' }, short: { 'pt-BR': 'Encerrada', en: 'Closed' } }
 };
+
+const TEXT = {
+  'pt-BR': {
+    local: 'Modo local',
+    localOffline: 'Modo local · nuvem indisponível',
+    cloud: 'Nuvem',
+    account: 'Minha conta',
+    login: 'Entrar / sincronizar',
+    noScore: 'Sem score',
+    compatible: '% compatível',
+    openJob: 'Abrir vaga ↗',
+    empty: 'Nenhuma candidatura',
+    ad: 'Publicidade',
+    adCopy: 'Espaço preparado para anúncios não intrusivos.'
+  },
+  en: {
+    local: 'Local mode',
+    localOffline: 'Local mode · cloud unavailable',
+    cloud: 'Cloud',
+    account: 'My account',
+    login: 'Sign in / sync',
+    noScore: 'No score',
+    compatible: '% match',
+    openJob: 'Open job ↗',
+    empty: 'No applications',
+    ad: 'Advertisement',
+    adCopy: 'Reserved for non-intrusive ads.'
+  }
+};
+
+function tr(key) {
+  return TEXT[currentLang]?.[key] || TEXT['pt-BR'][key] || key;
+}
+
+function statusText(data, type) {
+  return data?.[type]?.[currentLang] || data?.[type]?.['pt-BR'] || '';
+}
+
+function applyLanguage() {
+  document.documentElement.lang = currentLang;
+  document.querySelectorAll('[data-lang]').forEach(button => {
+    const active = button.dataset.lang === currentLang;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+
+  const ad = document.querySelector('.ad-slot');
+  if (ad) {
+    ad.setAttribute('aria-label', tr('ad'));
+    const [label, copy] = ad.querySelectorAll('span,small');
+    if (label) label.textContent = tr('ad');
+    if (copy) copy.textContent = tr('adCopy');
+  }
+
+  const replacements = currentLang === 'en' ? {
+    '.eyebrow': ['APPLICATION TRACKER', 'APPLICATION FUNNEL', 'APPLICATION', 'YOUR ACCOUNT'],
+    '.hero h1': 'Miss fewer opportunities.\nMake every next step clear.',
+    '.hero-copy': 'Save opportunities, track every stage and quickly see which applications need your attention.',
+    '.hero-stat span': 'In progress',
+    '.hero-stat small': 'active applications',
+    '.search-wrap label': 'Search',
+    '#search': 'Company, role or note',
+    '.filter-wrap label': 'Status',
+    '#new-application': '+ New application',
+    '.metrics article:nth-child(1) span': 'Total',
+    '.metrics article:nth-child(2) span': 'Applied',
+    '.metrics article:nth-child(3) span': 'Interviews',
+    '.metrics article:nth-child(4) span': 'Average match',
+    '.section-heading h2': 'Where each opportunity stands',
+    '.section-heading > p': 'Change the status directly on each card.',
+    '.footer small': 'Without an account, data stays on this device. After signing in, it stays private in your account.'
+  } : null;
+
+  if (replacements) {
+    const eyebrow = document.querySelectorAll('.eyebrow');
+    replacements['.eyebrow'].forEach((text, i) => { if (eyebrow[i]) eyebrow[i].textContent = text; });
+    document.querySelector('.hero h1').innerHTML = 'Miss fewer opportunities.<br><span>Make every next step clear.</span>';
+    document.querySelector('.hero-copy').textContent = replacements['.hero-copy'];
+    document.querySelector('.hero-stat span').textContent = replacements['.hero-stat span'];
+    document.querySelector('.hero-stat small').textContent = replacements['.hero-stat small'];
+    document.querySelector('.search-wrap label').textContent = replacements['.search-wrap label'];
+    searchInput.placeholder = replacements['#search'];
+    document.querySelector('.filter-wrap label').textContent = replacements['.filter-wrap label'];
+    document.querySelector('#new-application').textContent = replacements['#new-application'];
+    document.querySelector('.metrics article:nth-child(1) span').textContent = replacements['.metrics article:nth-child(1) span'];
+    document.querySelector('.metrics article:nth-child(2) span').textContent = replacements['.metrics article:nth-child(2) span'];
+    document.querySelector('.metrics article:nth-child(3) span').textContent = replacements['.metrics article:nth-child(3) span'];
+    document.querySelector('.metrics article:nth-child(4) span').textContent = replacements['.metrics article:nth-child(4) span'];
+    document.querySelector('.section-heading h2').textContent = replacements['.section-heading h2'];
+    document.querySelector('.section-heading > p').textContent = replacements['.section-heading > p'];
+    document.querySelector('.footer small').textContent = replacements['.footer small'];
+  } else {
+    const eyebrow = document.querySelectorAll('.eyebrow');
+    ['ORGANIZADOR DE CANDIDATURAS','FUNIL DE CANDIDATURAS','CANDIDATURA','SUA CONTA'].forEach((text,i)=>{if(eyebrow[i]) eyebrow[i].textContent=text;});
+    document.querySelector('.hero h1').innerHTML = 'Menos vagas perdidas.<br><span>Mais próximos passos claros.</span>';
+    document.querySelector('.hero-copy').textContent = 'Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.';
+    document.querySelector('.hero-stat span').textContent = 'Em andamento';
+    document.querySelector('.hero-stat small').textContent = 'candidaturas ativas';
+    document.querySelector('.search-wrap label').textContent = 'Buscar';
+    searchInput.placeholder = 'Empresa, cargo ou anotação';
+    document.querySelector('.filter-wrap label').textContent = 'Status';
+    document.querySelector('#new-application').textContent = '+ Nova candidatura';
+    document.querySelector('.metrics article:nth-child(1) span').textContent = 'Total';
+    document.querySelector('.metrics article:nth-child(2) span').textContent = 'Candidatadas';
+    document.querySelector('.metrics article:nth-child(3) span').textContent = 'Entrevistas';
+    document.querySelector('.metrics article:nth-child(4) span').textContent = 'Compatibilidade média';
+    document.querySelector('.section-heading h2').textContent = 'Onde cada vaga está agora';
+    document.querySelector('.section-heading > p').textContent = 'Altere o status diretamente em cada card.';
+    document.querySelector('.footer small').textContent = 'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.';
+  }
+
+  accountOpen.textContent = currentUser ? tr('account') : tr('login');
+  syncStatus.textContent = currentUser
+    ? (loading ? (currentLang === 'en' ? 'Syncing…' : 'Sincronizando…') : tr('cloud') + ' · ' + (currentUser.email || (currentLang === 'en' ? 'connected' : 'conectado')))
+    : (supabaseClient ? tr('local') : tr('localOffline'));
+  renderBoard();
+}
 
 const board = document.querySelector('#board');
 const searchInput = document.querySelector('#search');
@@ -155,8 +274,8 @@ function safeHref(url) {
 function cardHtml(item) {
   const href = safeHref(item.url);
   const score = item.matchScore == null || !Number.isFinite(item.matchScore)
-    ? '<span class="score neutral">Sem score</span>'
-    : '<span class="score ' + scoreClass(item.matchScore) + '">' + item.matchScore + '% compatível</span>';
+    ? '<span class="score neutral">' + tr('noScore') + '</span>'
+    : '<span class="score ' + scoreClass(item.matchScore) + '">' + item.matchScore + tr('compatible') + '</span>';
 
   return '<article class="job-card" data-id="' + escapeHtml(item.id) + '">' +
     '<div class="card-top"><div><strong>' + escapeHtml(item.role) + '</strong><span>' + escapeHtml(item.company) + '</span></div>' +
@@ -167,10 +286,10 @@ function cardHtml(item) {
     '<div class="card-bottom">' +
       '<label><span>Status</span><select data-status="' + escapeHtml(item.id) + '">' +
         Object.entries(STATUS).map(([value, data]) =>
-          '<option value="' + value + '"' + (item.status === value ? ' selected' : '') + '>' + escapeHtml(data.short) + '</option>'
+          '<option value="' + value + '"' + (item.status === value ? ' selected' : '') + '>' + escapeHtml(statusText(data, 'short')) + '</option>'
         ).join('') +
       '</select></label>' +
-      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">Abrir vaga ↗</a>' : '') +
+      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">" + tr('openJob') + "</a>' : '') +
     '</div>' +
   '</article>';
 }
@@ -182,11 +301,11 @@ function renderBoard() {
 
   board.innerHTML = Object.entries(STATUS).map(([key, data]) =>
     '<section class="column" data-column="' + key + '">' +
-      '<header><span>' + escapeHtml(data.label) + '</span><strong>' + grouped[key].length + '</strong></header>' +
+      '<header><span>' + escapeHtml(statusText(data, 'label')) + '</span><strong>' + grouped[key].length + '</strong></header>' +
       '<div class="column-list">' +
         (grouped[key].length
           ? grouped[key].map(cardHtml).join('')
-          : '<div class="empty-column">Nenhuma candidatura</div>') +
+          : '<div class="empty-column">' + tr('empty') + '</div>') +
       '</div>' +
     '</section>'
   ).join('');
@@ -588,3 +707,13 @@ migrateLegacyLocal();
 renderBoard();
 updateAccountUi();
 initAuth();
+
+
+document.querySelectorAll('[data-lang]').forEach(button => {
+  button.addEventListener('click', () => {
+    currentLang = button.dataset.lang === 'en' ? 'en' : 'pt-BR';
+    localStorage.setItem('vagacerta-lang', currentLang);
+    applyLanguage();
+  });
+});
+applyLanguage();
