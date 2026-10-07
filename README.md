@@ -4,9 +4,9 @@ Organizador de candidaturas com funil, métricas e sincronização.
 
 ## Status
 
-> **Próximo foco pesado do portfólio após a fila de fechamento de 07/10/2026.**
+> **Os quatro diferenciais do gate foram implementados em 07/10/2026. O projeto entra agora em validação de infraestrutura/QA antes de ser marcado como MVP finalizado.**
 
-A fundação fullstack está funcional, mas o produto ainda não entra em validação final porque faltam os diferenciais que o separam de um Kanban/planilha de candidaturas.
+A fundação fullstack e os quatro diferenciais já estão implementados. O que resta é aplicar a migration no `pizzaria-db`, validar RLS/sincronização real e confirmar QA/Pages verdes.
 
 - frontend próprio;
 - modo local quando aplicável;
@@ -45,13 +45,23 @@ Veja `FULLSTACK.md` para regras de produto, QA, segurança e próximas etapas.
 - Anúncios não devem interromper cadastro, edição, leitura ou mudança de status das candidaturas.
 
 
-## Escopo fechado da próxima fase
+## Gate atual de finalização
 
-Antes de adicionar qualquer outra feature, concluir nesta ordem:
+Implementado no GitHub:
 
-1. **Compatibilidade explicada** — score 0–100 acompanhado dos requisitos encontrados, atendidos, ausentes e não comprovados.
-2. **Currículo personalizado** — versões ligadas à candidatura em `vagacerta_documents`, sem sobrescrever o currículo-base.
-3. **Follow-up** — data sugerida/definida, fila de retornos pendentes e estado de concluído/adiado.
-4. **Preparação de entrevista** — perguntas, pontos para revisar e notas vinculadas à candidatura.
+- [x] compatibilidade explicada por requisito, com score calculado;
+- [x] currículos personalizados versionados por candidatura;
+- [x] fila de follow-up com concluir/adiar e destaque de atrasados;
+- [x] preparação de entrevista ligada à candidatura;
+- [x] Browser E2E do fluxo principal;
+- [x] workflows QA e GitHub Pages;
+- [x] migration + RLS versionadas em `supabase/migrations/20261007_vagacerta_product_gate.sql`.
 
-Importação automática de vaga por URL e IA generativa ficam depois desse núcleo. IA, quando usada, deve permanecer exclusivamente no backend.
+Ainda depende de validação externa:
+
+- [ ] aplicar a migration no `pizzaria-db`;
+- [ ] validar duas contas/dispositivos e isolamento RLS;
+- [ ] confirmar Actions/Pages verdes;
+- [ ] revisar mobile/teclado no ambiente publicado.
+
+Importação automática de vaga por URL e IA generativa ficam depois desse gate. IA, quando usada, deve permanecer exclusivamente no backend.
