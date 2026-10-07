@@ -4,7 +4,9 @@ Organizador de candidaturas com funil, métricas e sincronização.
 
 ## Status
 
-MVP fullstack funcional preparado para repositório independente.
+> **Próximo foco pesado do portfólio após a fila de fechamento de 07/10/2026.**
+
+A fundação fullstack está funcional, mas o produto ainda não entra em validação final porque faltam os diferenciais que o separam de um Kanban/planilha de candidaturas.
 
 - frontend próprio;
 - modo local quando aplicável;
@@ -41,3 +43,15 @@ Veja `FULLSTACK.md` para regras de produto, QA, segurança e próximas etapas.
 - A preferência de idioma é persistida no navegador.
 - O modelo de monetização é baseado em anúncios não intrusivos.
 - Anúncios não devem interromper cadastro, edição, leitura ou mudança de status das candidaturas.
+
+
+## Escopo fechado da próxima fase
+
+Antes de adicionar qualquer outra feature, concluir nesta ordem:
+
+1. **Compatibilidade explicada** — score 0–100 acompanhado dos requisitos encontrados, atendidos, ausentes e não comprovados.
+2. **Currículo personalizado** — versões ligadas à candidatura em `vagacerta_documents`, sem sobrescrever o currículo-base.
+3. **Follow-up** — data sugerida/definida, fila de retornos pendentes e estado de concluído/adiado.
+4. **Preparação de entrevista** — perguntas, pontos para revisar e notas vinculadas à candidatura.
+
+Importação automática de vaga por URL e IA generativa ficam depois desse núcleo. IA, quando usada, deve permanecer exclusivamente no backend.
