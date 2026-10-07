@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T08:53:01.138Z",
+  "generatedAt": "2026-10-07T08:53:39.097Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -10,7 +10,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 1440,
-      "height": 1017,
+      "height": 1081,
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
@@ -37,7 +37,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 390,
-      "height": 1588,
+      "height": 1652,
       "viewportWidth": 390,
       "viewportHeight": 844,
       "overflow": [],
