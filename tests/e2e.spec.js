@@ -50,8 +50,8 @@ test("application flows through explained match, follow-up, resume and interview
   await page.locator("#documents-close").click();
 
   await card.locator("[data-edit]").click();
-  await expect(page.locator('[name="interviewQuestions"]')).toContainText("Conte um projeto difícil");
-  await expect(page.locator('[name="interviewReview"]')).toContainText("React hooks");
+  await expect(page.locator('[name="interviewQuestions"]')).toHaveValue(/Conte um projeto difícil/);
+  await expect(page.locator('[name="interviewReview"]')).toHaveValue(/React hooks/);
   await page.locator("#cancel-application").click();
 
   await page.locator('[data-status]').selectOption("interview");
