@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-07T06:50:30.326Z",
+  "generatedAt": "2026-10-07T06:52:50.104Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -14,32 +14,7 @@
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
-      "smallTapTargets": [
-        {
-          "tag": "a",
-          "id": "",
-          "className": "brand",
-          "width": 97,
-          "height": 26,
-          "text": "VagaCerta."
-        },
-        {
-          "tag": "button",
-          "id": "",
-          "className": "lang-button active",
-          "width": 28,
-          "height": 25,
-          "text": "PT"
-        },
-        {
-          "tag": "button",
-          "id": "",
-          "className": "lang-button",
-          "width": 29,
-          "height": 25,
-          "text": "EN"
-        }
-      ],
+      "smallTapTargets": [],
       "tinyText": [
         {
           "text": "Publicidade",
@@ -62,36 +37,11 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 390,
-      "height": 1476,
+      "height": 1490,
       "viewportWidth": 390,
       "viewportHeight": 844,
       "overflow": [],
-      "smallTapTargets": [
-        {
-          "tag": "a",
-          "id": "",
-          "className": "brand",
-          "width": 97,
-          "height": 26,
-          "text": "VagaCerta."
-        },
-        {
-          "tag": "button",
-          "id": "",
-          "className": "lang-button active",
-          "width": 28,
-          "height": 25,
-          "text": "PT"
-        },
-        {
-          "tag": "button",
-          "id": "",
-          "className": "lang-button",
-          "width": 29,
-          "height": 25,
-          "text": "EN"
-        }
-      ],
+      "smallTapTargets": [],
       "tinyText": [
         {
           "text": "Publicidade",
