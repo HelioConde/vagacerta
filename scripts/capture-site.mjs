@@ -60,6 +60,16 @@ async function capture(name, viewport) {
 
     const smallTapTargets = [...document.querySelectorAll("button,a,input,select,textarea,[role='button']")]
       .filter(element => visible(element))
+      .filter(element => {
+        if (element instanceof HTMLInputElement && (element.type === "checkbox" || element.type === "radio")) {
+          const label = element.closest("label");
+          if (label && visible(label)) {
+            const rect = label.getBoundingClientRect();
+            if (rect.width >= 36 && rect.height >= 36) return false;
+          }
+        }
+        return true;
+      })
       .map(element => {
         const rect = element.getBoundingClientRect();
         return {
