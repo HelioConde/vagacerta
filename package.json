@@ -1,8 +1,10 @@
 {
   "name": "vagacerta",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
+    "check": "node --check app.js && node --check supabase-config.js && node --check live-update.js",
+    "test:e2e": "playwright test",
     "screenshots": "node scripts/capture-site.mjs"
   },
   "devDependencies": {
