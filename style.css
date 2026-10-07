@@ -135,3 +135,41 @@ a{color:inherit;text-decoration:none}
   .brand{min-height:40px}
   .language-switch{padding:2px}
 }
+
+
+/* VagaCerta product gate */
+.panel-lite{margin:0 0 28px;padding:18px;border:1px solid var(--line);border-radius:15px;background:var(--card);box-shadow:var(--shadow)}
+.section-heading.compact{align-items:center;margin-bottom:12px}
+.follow-up-list{display:grid;gap:9px}
+.follow-up-empty{padding:16px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:11px;text-align:center}
+.follow-up-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 13px;border:1px solid var(--line);border-radius:11px;background:#fbfcfb}
+.follow-up-item.overdue{border-color:#e5b9b4;background:#fff7f6}
+.follow-up-copy strong,.follow-up-copy span{display:block}
+.follow-up-copy strong{font:700 12px Manrope,sans-serif}
+.follow-up-copy span{margin-top:3px;color:var(--muted);font-size:10px}
+.follow-up-actions{display:flex;gap:6px;flex-wrap:wrap}
+.follow-up-actions button,.card-tools button{border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--accent);padding:7px 9px;font-size:9px;font-weight:800}
+.follow-up-actions button:hover,.card-tools button:hover{background:var(--soft)}
+.match-breakdown{display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin:-3px 0 8px}
+.match-breakdown span,.evidence-chip,.follow-chip{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:#f0f3f1;color:#66736b;font-size:9px;font-weight:800}
+.match-breakdown .met,.evidence-chip.met{background:#e2f1e7;color:#25623e}
+.match-breakdown .missing,.evidence-chip.missing{background:#fde7e5;color:#8c4039}
+.match-breakdown .unknown,.evidence-chip.unknown{background:#fff3d9;color:#7b5a15}
+.field-hint{display:block;margin-top:5px;color:var(--muted);font-size:9.5px;line-height:1.45}
+.form-section{margin:14px 0 4px;padding:10px 14px 4px;border:1px solid var(--line);border-radius:12px}
+.form-section legend{padding:0 7px;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.4px}
+.card-evidence{display:flex;flex-wrap:wrap;gap:4px;margin:7px 0 0}
+.card-tools{display:flex;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid #edf0ed}
+.follow-chip.overdue{background:#fde7e5;color:#8c4039}
+.documents-dialog{width:min(760px,calc(100vw - 24px))}
+.document-list{display:grid;gap:9px;margin-top:16px}
+.document-version{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fafbfa}
+.document-version header{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.document-version strong{font-size:12px}
+.document-version time{color:var(--muted);font-size:9px}
+.document-version pre{max-height:190px;overflow:auto;margin:9px 0 0;padding:10px;border-radius:8px;background:#fff;border:1px solid #edf0ed;white-space:pre-wrap;font:10px/1.5 'DM Sans',sans-serif;color:#4f5c54}
+@media(max-width:620px){
+  .follow-up-item{grid-template-columns:1fr}
+  .follow-up-actions{width:100%}.follow-up-actions button{flex:1}
+  .card-tools{flex-direction:column}.card-tools button{width:100%}
+}
