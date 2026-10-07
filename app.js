@@ -1,5 +1,6 @@
 const supabaseClient = window.IDEIAS_SUPABASE?.client || null;
 const STORAGE_KEY = 'vagacerta-applications-v2';
+const DOCUMENT_STORAGE_KEY = 'vagacerta-documents-v1';
 
 let currentLang = localStorage.getItem('vagacerta-lang') === 'en' ? 'en' : 'pt-BR';
 
@@ -40,6 +41,45 @@ const TEXT = {
   }
 };
 
+const GATE_TEXT = {
+  'pt-BR': {
+    followUpEyebrow:'PRÓXIMOS RETORNOS', followUpTitle:'Follow-ups que precisam de atenção',
+    followUpHelp:'Conclua ou adie sem perder o histórico da candidatura.',
+    calculatedMatch:'Compatibilidade calculada', requirementsTitle:'Compatibilidade explicada por requisito',
+    requirementsHint:'Uma linha por requisito: + atendido, - ausente, ? não comprovado. O score é calculado apenas com evidências confirmadas.',
+    requirementsPlaceholder:'+ React\n+ HTML/CSS\n- TypeScript\n? Inglês avançado',
+    followUpDate:'Data do follow-up', followUpStatus:'Estado do follow-up', pending:'Pendente', completed:'Concluído', postponed:'Adiado',
+    interviewPrep:'Preparação de entrevista', interviewQuestions:'Perguntas para treinar', interviewQuestionsPlaceholder:'Uma pergunta por linha',
+    reviewPoints:'Pontos para revisar', reviewPointsPlaceholder:'React hooks\nAPIs REST\nProjeto principal', interviewNotes:'Notas da entrevista',
+    resumeVersionsEyebrow:'CURRÍCULOS DA CANDIDATURA', resumeVersions:'Versões personalizadas',
+    resumeVersionsHelp:'Cada versão fica ligada a esta candidatura e nunca sobrescreve seu currículo-base.',
+    versionName:'Nome da versão', resumeContent:'Conteúdo do currículo', saveNewVersion:'Salvar nova versão',
+    noFollowUps:'Nenhum follow-up pendente.', dueToday:'vence hoje', overdue:'atrasado', due:'previsto para',
+    finish:'Concluir', postpone7:'Adiar 7 dias', resumes:'Currículos', noVersions:'Nenhuma versão personalizada ainda.',
+    met:'atendidos', missing:'ausentes', unknown:'não comprovados', evidence:'evidências'
+  },
+  en: {
+    followUpEyebrow:'NEXT FOLLOW-UPS', followUpTitle:'Follow-ups that need attention',
+    followUpHelp:'Complete or postpone without losing the application history.',
+    calculatedMatch:'Calculated match', requirementsTitle:'Requirement-by-requirement match',
+    requirementsHint:'One requirement per line: + met, - missing, ? unverified. The score uses confirmed evidence only.',
+    requirementsPlaceholder:'+ React\n+ HTML/CSS\n- TypeScript\n? Advanced English',
+    followUpDate:'Follow-up date', followUpStatus:'Follow-up status', pending:'Pending', completed:'Completed', postponed:'Postponed',
+    interviewPrep:'Interview preparation', interviewQuestions:'Questions to practice', interviewQuestionsPlaceholder:'One question per line',
+    reviewPoints:'Topics to review', reviewPointsPlaceholder:'React hooks\nREST APIs\nMain project', interviewNotes:'Interview notes',
+    resumeVersionsEyebrow:'APPLICATION RESUMES', resumeVersions:'Tailored versions',
+    resumeVersionsHelp:'Each version is linked to this application and never overwrites your base resume.',
+    versionName:'Version name', resumeContent:'Resume content', saveNewVersion:'Save new version',
+    noFollowUps:'No pending follow-ups.', dueToday:'due today', overdue:'overdue', due:'due',
+    finish:'Complete', postpone7:'Postpone 7 days', resumes:'Resumes', noVersions:'No tailored version yet.',
+    met:'met', missing:'missing', unknown:'unverified', evidence:'evidence'
+  }
+};
+
+function gateTr(key) {
+  return GATE_TEXT[currentLang]?.[key] || GATE_TEXT['pt-BR'][key] || key;
+}
+
 function tr(key) {
   return TEXT[currentLang]?.[key] || TEXT['pt-BR'][key] || key;
 }
@@ -54,6 +94,12 @@ function applyLanguage() {
     const active = button.dataset.lang === currentLang;
     button.classList.toggle('active', active);
     button.setAttribute('aria-pressed', String(active));
+  });
+  document.querySelectorAll('[data-vc-i18n]').forEach(element => {
+    element.textContent = gateTr(element.dataset.vcI18n);
+  });
+  document.querySelectorAll('[data-vc-placeholder]').forEach(element => {
+    element.placeholder = gateTr(element.dataset.vcPlaceholder);
   });
 
   const ad = document.querySelector('.ad-slot');
@@ -142,7 +188,13 @@ const accountMessage = document.querySelector('#account-message');
 const accountOpen = document.querySelector('#account-open');
 const syncStatus = document.querySelector('#sync-status');
 const importLocalButton = document.querySelector('#import-local');
+const followUpList = document.querySelector('#follow-up-list');
+const documentsDialog = document.querySelector('#documents-dialog');
+const documentForm = document.querySelector('#document-form');
+const documentList = document.querySelector('#document-list');
+const documentsMessage = document.querySelector('#documents-message');
 
+let activeDocumentApplicationId = null;
 let currentUser = null;
 let cloudItems = [];
 let loading = false;
@@ -198,20 +250,107 @@ function writeLocal(items) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(items.slice(0, 150)));
 }
 
+function normalizeRequirements(input) {
+  if (typeof input === 'string') return parseRequirementsText(input);
+  if (!Array.isArray(input)) return [];
+  return input.map(entry => ({
+    text: String(entry?.text || '').trim(),
+    status: ['met','missing','unknown'].includes(entry?.status) ? entry.status : 'unknown'
+  })).filter(entry => entry.text).slice(0, 60);
+}
+
+function parseRequirementsText(text) {
+  return String(text || '').split(/\n+/).map(line => line.trim()).filter(Boolean).map(line => {
+    const prefix = line.charAt(0);
+    const status = prefix === '+' ? 'met' : prefix === '-' ? 'missing' : 'unknown';
+    const value = ['+','-','?'].includes(prefix) ? line.slice(1).trim() : line;
+    return { text: value, status };
+  }).filter(entry => entry.text).slice(0, 60);
+}
+
+function requirementsToText(items) {
+  const prefix = { met: '+', missing: '-', unknown: '?' };
+  return normalizeRequirements(items).map(entry => (prefix[entry.status] || '?') + ' ' + entry.text).join('\n');
+}
+
+function compatibilitySummary(items) {
+  const counts = { met: 0, missing: 0, unknown: 0 };
+  normalizeRequirements(items).forEach(entry => counts[entry.status]++);
+  const confirmed = counts.met + counts.missing;
+  return { ...counts, total: counts.met + counts.missing + counts.unknown, score: confirmed ? Math.round(counts.met / confirmed * 100) : null };
+}
+
+function lineList(value) {
+  if (Array.isArray(value)) return value.map(x => String(x || '').trim()).filter(Boolean).slice(0, 40);
+  return String(value || '').split(/\n+/).map(x => x.trim()).filter(Boolean).slice(0, 40);
+}
+
+function normalizeInterviewPrep(value) {
+  const raw = value && typeof value === 'object' ? value : {};
+  return {
+    questions: lineList(raw.questions),
+    review: lineList(raw.review),
+    notes: String(raw.notes || '').trim()
+  };
+}
+
+function todayKey() {
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
+
+function addDays(dateKey, days) {
+  const base = /^\d{4}-\d{2}-\d{2}$/.test(String(dateKey || '')) ? new Date(dateKey + 'T12:00:00') : new Date();
+  base.setDate(base.getDate() + days);
+  const local = new Date(base.getTime() - base.getTimezoneOffset() * 60000);
+  return local.toISOString().slice(0, 10);
+}
+
+function readLocalDocuments() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DOCUMENT_STORAGE_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed : [];
+  } catch { return []; }
+}
+
+function writeLocalDocuments(items) {
+  localStorage.setItem(DOCUMENT_STORAGE_KEY, JSON.stringify(items.slice(0, 100)));
+}
+
+function mapDocumentRow(row) {
+  return {
+    id: row.id,
+    applicationId: row.application_id || row.applicationId,
+    title: row.title || 'Currículo personalizado',
+    content: row.content || '',
+    kind: row.kind || 'resume',
+    createdAt: row.created_at || row.createdAt || new Date().toISOString(),
+    updatedAt: row.updated_at || row.updatedAt || row.created_at || row.createdAt || new Date().toISOString()
+  };
+}
+
 function visibleItems() {
   return currentUser ? cloudItems : readLocal();
 }
 
 function normalizeLocal(item) {
+  const requirements = normalizeRequirements(item.requirements);
+  const explained = compatibilitySummary(requirements);
+  const legacyScore = item.matchScore === '' || item.matchScore == null ? null : Number(item.matchScore);
   return {
     id: item.id || makeUuid(),
     company: String(item.company || '').trim(),
     role: String(item.role || '').trim(),
     url: String(item.url || '').trim(),
     status: STATUS[item.status] ? item.status : 'saved',
-    matchScore: item.matchScore === '' || item.matchScore == null ? null : Number(item.matchScore),
+    matchScore: explained.score == null ? (Number.isFinite(legacyScore) ? legacyScore : null) : explained.score,
+    requirements,
     salary: String(item.salary || '').trim(),
     notes: String(item.notes || '').trim(),
+    followUpAt: /^\d{4}-\d{2}-\d{2}$/.test(String(item.followUpAt || '')) ? String(item.followUpAt) : '',
+    followUpStatus: ['pending','completed','postponed'].includes(item.followUpStatus) ? item.followUpStatus : 'pending',
+    interviewPrep: normalizeInterviewPrep(item.interviewPrep),
     appliedAt: item.appliedAt || null,
     createdAt: item.createdAt || Date.now(),
     updatedAt: item.updatedAt || Date.now()
@@ -219,19 +358,23 @@ function normalizeLocal(item) {
 }
 
 function mapRow(row) {
-  return {
+  return normalizeLocal({
     id: row.id,
     company: row.company,
     role: row.role,
     url: row.url || '',
     status: STATUS[row.status] ? row.status : 'saved',
     matchScore: row.match_score == null ? null : Number(row.match_score),
+    requirements: row.requirements || [],
     salary: row.salary || '',
     notes: row.notes || '',
+    followUpAt: row.follow_up_at ? String(row.follow_up_at).slice(0,10) : '',
+    followUpStatus: row.follow_up_status || 'pending',
+    interviewPrep: row.interview_prep || {},
     appliedAt: row.applied_at,
     createdAt: Date.parse(row.created_at),
     updatedAt: Date.parse(row.updated_at)
-  };
+  });
 }
 
 function showToast(message) {
@@ -273,16 +416,25 @@ function safeHref(url) {
 
 function cardHtml(item) {
   const href = safeHref(item.url);
+  const evidence = compatibilitySummary(item.requirements);
   const score = item.matchScore == null || !Number.isFinite(item.matchScore)
     ? '<span class="score neutral">' + tr('noScore') + '</span>'
     : '<span class="score ' + scoreClass(item.matchScore) + '">' + item.matchScore + tr('compatible') + '</span>';
+  const evidenceHtml = evidence.total
+    ? '<div class="card-evidence"><span class="evidence-chip met">' + evidence.met + ' ' + escapeHtml(gateTr('met')) + '</span><span class="evidence-chip missing">' + evidence.missing + ' ' + escapeHtml(gateTr('missing')) + '</span><span class="evidence-chip unknown">' + evidence.unknown + ' ' + escapeHtml(gateTr('unknown')) + '</span></div>'
+    : '';
+  const overdue = item.followUpAt && item.followUpStatus === 'pending' && item.followUpAt < todayKey();
+  const followHtml = item.followUpAt && item.followUpStatus !== 'completed'
+    ? '<span class="follow-chip ' + (overdue ? 'overdue' : '') + '">' + escapeHtml(item.followUpAt) + '</span>' : '';
 
   return '<article class="job-card" data-id="' + escapeHtml(item.id) + '">' +
     '<div class="card-top"><div><strong>' + escapeHtml(item.role) + '</strong><span>' + escapeHtml(item.company) + '</span></div>' +
     '<button class="icon-button small" type="button" data-edit="' + escapeHtml(item.id) + '" aria-label="Editar candidatura">•••</button></div>' +
-    '<div class="card-meta">' + score +
+    '<div class="card-meta">' + score + followHtml +
     (item.salary ? '<span class="salary">' + escapeHtml(item.salary) + '</span>' : '') + '</div>' +
+    evidenceHtml +
     (item.notes ? '<p class="card-notes">' + escapeHtml(item.notes) + '</p>' : '') +
+    '<div class="card-tools"><button type="button" data-documents="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
     '<div class="card-bottom">' +
       '<label><span>Status</span><select data-status="' + escapeHtml(item.id) + '">' +
         Object.entries(STATUS).map(([value, data]) =>
@@ -311,6 +463,22 @@ function renderBoard() {
   ).join('');
 
   renderMetrics();
+  renderFollowUps();
+}
+
+function renderFollowUps() {
+  if (!followUpList) return;
+  const items = visibleItems().map(normalizeLocal).filter(item => item.followUpAt && item.followUpStatus !== 'completed').sort((a,b) => a.followUpAt.localeCompare(b.followUpAt));
+  if (!items.length) {
+    followUpList.innerHTML = '<div class="follow-up-empty">' + escapeHtml(gateTr('noFollowUps')) + '</div>';
+    return;
+  }
+  const today = todayKey();
+  followUpList.innerHTML = items.map(item => {
+    const isOverdue = item.followUpAt < today;
+    const timing = item.followUpAt === today ? gateTr('dueToday') : (isOverdue ? gateTr('overdue') : gateTr('due') + ' ' + item.followUpAt);
+    return '<article class="follow-up-item ' + (isOverdue ? 'overdue' : '') + '"><div class="follow-up-copy"><strong>' + escapeHtml(item.role + ' · ' + item.company) + '</strong><span>' + escapeHtml(timing) + '</span></div><div class="follow-up-actions"><button type="button" data-follow-done="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('finish')) + '</button><button type="button" data-follow-postpone="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('postpone7')) + '</button></div></article>';
+  }).join('');
 }
 
 function renderMetrics() {
@@ -330,6 +498,9 @@ function resetForm() {
   applicationForm.reset();
   applicationForm.elements.id.value = '';
   applicationForm.elements.status.value = 'saved';
+  applicationForm.elements.followUpStatus.value = 'pending';
+  applicationForm.elements.matchScore.value = '';
+  renderMatchBreakdown([]);
   deleteButton.hidden = true;
   formMessage.textContent = '';
   document.querySelector('#application-title').textContent = 'Adicionar oportunidade';
@@ -351,20 +522,41 @@ function openEdit(id) {
   applicationForm.elements.url.value = item.url;
   applicationForm.elements.status.value = item.status;
   applicationForm.elements.matchScore.value = item.matchScore ?? '';
+  applicationForm.elements.requirements.value = requirementsToText(item.requirements);
   applicationForm.elements.salary.value = item.salary;
+  applicationForm.elements.followUpAt.value = item.followUpAt || '';
+  applicationForm.elements.followUpStatus.value = item.followUpStatus || 'pending';
+  applicationForm.elements.interviewQuestions.value = item.interviewPrep.questions.join('\n');
+  applicationForm.elements.interviewReview.value = item.interviewPrep.review.join('\n');
+  applicationForm.elements.interviewNotes.value = item.interviewPrep.notes;
   applicationForm.elements.notes.value = item.notes;
+  renderMatchBreakdown(item.requirements);
   deleteButton.hidden = false;
   formMessage.textContent = '';
   document.querySelector('#application-title').textContent = 'Editar candidatura';
   applicationDialog.showModal();
 }
 
+function renderMatchBreakdown(requirements) {
+  const host = document.querySelector('#match-breakdown');
+  if (!host) return;
+  const summary = compatibilitySummary(requirements);
+  applicationForm.elements.matchScore.value = summary.score == null ? '' : summary.score;
+  if (!summary.total) {
+    host.innerHTML = '';
+    return;
+  }
+  host.innerHTML = '<span class="met">' + summary.met + ' ' + escapeHtml(gateTr('met')) + '</span>' +
+    '<span class="missing">' + summary.missing + ' ' + escapeHtml(gateTr('missing')) + '</span>' +
+    '<span class="unknown">' + summary.unknown + ' ' + escapeHtml(gateTr('unknown')) + '</span>';
+}
+
 function formToItem(existing = null) {
   const values = Object.fromEntries(new FormData(applicationForm));
-  const scoreText = String(values.matchScore || '').trim();
-  const score = scoreText === '' ? null : Number(scoreText);
   const now = Date.now();
   const status = STATUS[values.status] ? values.status : 'saved';
+  const requirements = parseRequirementsText(values.requirements);
+  const explained = compatibilitySummary(requirements);
 
   return normalizeLocal({
     ...(existing || {}),
@@ -373,9 +565,17 @@ function formToItem(existing = null) {
     role: values.role,
     url: values.url,
     status,
-    matchScore: Number.isFinite(score) ? Math.min(100, Math.max(0, score)) : null,
+    matchScore: explained.score,
+    requirements,
     salary: values.salary,
     notes: values.notes,
+    followUpAt: values.followUpAt,
+    followUpStatus: values.followUpStatus,
+    interviewPrep: {
+      questions: lineList(values.interviewQuestions),
+      review: lineList(values.interviewReview),
+      notes: values.interviewNotes
+    },
     appliedAt: existing?.appliedAt || (status !== 'saved' ? new Date(now).toISOString() : null),
     createdAt: existing?.createdAt || now,
     updatedAt: now
@@ -391,8 +591,12 @@ async function saveCloud(item) {
     url: item.url || null,
     status: item.status,
     match_score: item.matchScore,
+    requirements: item.requirements,
     salary: item.salary || null,
     notes: item.notes,
+    follow_up_at: item.followUpAt || null,
+    follow_up_status: item.followUpStatus,
+    interview_prep: item.interviewPrep,
     applied_at: item.appliedAt,
     created_at: new Date(item.createdAt).toISOString(),
     updated_at: new Date(item.updatedAt).toISOString()
@@ -516,6 +720,56 @@ async function importLocal() {
   }
 }
 
+async function documentsForApplication(applicationId) {
+  if (currentUser && supabaseClient) {
+    const { data, error } = await supabaseClient.from('vagacerta_documents')
+      .select('*').eq('application_id', applicationId).eq('kind', 'resume')
+      .order('created_at', { ascending: false }).limit(30);
+    if (error) throw error;
+    return (data || []).map(mapDocumentRow);
+  }
+  return readLocalDocuments().map(mapDocumentRow).filter(doc => doc.applicationId === applicationId && doc.kind === 'resume')
+    .sort((a,b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+}
+
+async function renderDocuments() {
+  if (!activeDocumentApplicationId) return;
+  documentsMessage.textContent = '';
+  try {
+    const docs = await documentsForApplication(activeDocumentApplicationId);
+    documentList.innerHTML = docs.length ? docs.map(doc =>
+      '<article class="document-version"><header><strong>' + escapeHtml(doc.title) + '</strong><time>' + escapeHtml(new Date(doc.createdAt).toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR')) + '</time></header><pre>' + escapeHtml(doc.content) + '</pre></article>'
+    ).join('') : '<div class="follow-up-empty">' + escapeHtml(gateTr('noVersions')) + '</div>';
+  } catch (error) {
+    console.error(error);
+    documentList.innerHTML = '';
+    documentsMessage.textContent = currentLang === 'en' ? 'Could not load resume versions.' : 'Não foi possível carregar as versões de currículo.';
+  }
+}
+
+async function openDocuments(applicationId) {
+  activeDocumentApplicationId = applicationId;
+  documentForm.reset();
+  documentsDialog.showModal();
+  await renderDocuments();
+}
+
+async function saveDocumentVersion(title, content) {
+  const doc = {
+    id: makeUuid(), applicationId: activeDocumentApplicationId, title: String(title || '').trim(),
+    content: String(content || '').trim(), kind: 'resume', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+  };
+  if (currentUser && supabaseClient) {
+    const { error } = await supabaseClient.from('vagacerta_documents').insert({
+      id: doc.id, user_id: currentUser.id, application_id: doc.applicationId, kind: doc.kind,
+      title: doc.title, content: doc.content, created_at: doc.createdAt, updated_at: doc.updatedAt
+    });
+    if (error) throw error;
+  } else {
+    writeLocalDocuments([doc, ...readLocalDocuments()]);
+  }
+}
+
 document.querySelector('#new-application').addEventListener('click', openNew);
 document.querySelector('#application-close').addEventListener('click', () => applicationDialog.close());
 document.querySelector('#cancel-application').addEventListener('click', () => applicationDialog.close());
@@ -564,7 +818,9 @@ deleteButton.addEventListener('click', async () => {
 
 board.addEventListener('click', event => {
   const edit = event.target.closest('[data-edit]');
-  if (edit) openEdit(edit.dataset.edit);
+  if (edit) { openEdit(edit.dataset.edit); return; }
+  const docs = event.target.closest('[data-documents]');
+  if (docs) openDocuments(docs.dataset.documents);
 });
 
 board.addEventListener('change', async event => {
@@ -591,8 +847,55 @@ board.addEventListener('change', async event => {
   }
 });
 
+followUpList?.addEventListener('click', async event => {
+  const done = event.target.closest('[data-follow-done]');
+  const postpone = event.target.closest('[data-follow-postpone]');
+  const id = done?.dataset.followDone || postpone?.dataset.followPostpone;
+  if (!id) return;
+  const item = visibleItems().map(normalizeLocal).find(entry => entry.id === id);
+  if (!item) return;
+  if (done) item.followUpStatus = 'completed';
+  if (postpone) {
+    item.followUpAt = addDays(item.followUpAt, 7);
+    item.followUpStatus = 'pending';
+  }
+  item.updatedAt = Date.now();
+  try {
+    await persistItem(item);
+    showToast(done ? (currentLang === 'en' ? 'Follow-up completed.' : 'Follow-up concluído.') : (currentLang === 'en' ? 'Follow-up postponed.' : 'Follow-up adiado.'));
+  } catch (error) {
+    console.error(error);
+    showToast(currentLang === 'en' ? 'Could not update follow-up.' : 'Não foi possível atualizar o follow-up.');
+  }
+});
+
+applicationForm.elements.requirements.addEventListener('input', event => {
+  renderMatchBreakdown(parseRequirementsText(event.target.value));
+});
+
 searchInput.addEventListener('input', renderBoard);
 statusFilter.addEventListener('change', renderBoard);
+
+document.querySelector('#documents-close').addEventListener('click', () => documentsDialog.close());
+documentsDialog.addEventListener('click', event => { if (event.target === documentsDialog) documentsDialog.close(); });
+documentForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (!activeDocumentApplicationId || !documentForm.reportValidity()) return;
+  const submit = documentForm.querySelector('[type="submit"]');
+  submit.disabled = true;
+  documentsMessage.textContent = currentLang === 'en' ? 'Saving new version…' : 'Salvando nova versão…';
+  try {
+    await saveDocumentVersion(documentForm.elements.title.value, documentForm.elements.content.value);
+    documentForm.reset();
+    documentsMessage.textContent = currentLang === 'en' ? 'New version saved.' : 'Nova versão salva.';
+    await renderDocuments();
+  } catch (error) {
+    console.error(error);
+    documentsMessage.textContent = currentLang === 'en' ? 'Could not save this version.' : 'Não foi possível salvar esta versão.';
+  } finally {
+    submit.disabled = false;
+  }
+});
 
 document.querySelector('#account-close').addEventListener('click', () => accountDialog.close());
 accountOpen.addEventListener('click', () => accountDialog.showModal());
