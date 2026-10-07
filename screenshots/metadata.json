@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-10-07T06:49:33.561Z",
+  "baseUrl": "http://127.0.0.1:4173/",
+  "captures": [
+    {
+      "name": "desktop-full.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 1440,
+      "height": 1000,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000,
+      "overflow": [],
+      "smallTapTargets": [
+        {
+          "tag": "a",
+          "id": "",
+          "className": "brand",
+          "width": 97,
+          "height": 26,
+          "text": "VagaCerta."
+        },
+        {
+          "tag": "button",
+          "id": "",
+          "className": "lang-button active",
+          "width": 28,
+          "height": 25,
+          "text": "PT"
+        },
+        {
+          "tag": "button",
+          "id": "",
+          "className": "lang-button",
+          "width": 29,
+          "height": 25,
+          "text": "EN"
+        }
+      ],
+      "tinyText": [
+        {
+          "text": "Publicidade",
+          "fontSize": 9
+        },
+        {
+          "text": "Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.",
+          "fontSize": 9.16667
+        }
+      ],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "mobile-full.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 390,
+      "height": 1476,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "overflow": [],
+      "smallTapTargets": [
+        {
+          "tag": "a",
+          "id": "",
+          "className": "brand",
+          "width": 97,
+          "height": 26,
+          "text": "VagaCerta."
+        },
+        {
+          "tag": "button",
+          "id": "",
+          "className": "lang-button active",
+          "width": 28,
+          "height": 25,
+          "text": "PT"
+        },
+        {
+          "tag": "button",
+          "id": "",
+          "className": "lang-button",
+          "width": 29,
+          "height": 25,
+          "text": "EN"
+        }
+      ],
+      "tinyText": [
+        {
+          "text": "Publicidade",
+          "fontSize": 9
+        },
+        {
+          "text": "Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.",
+          "fontSize": 9.16667
+        }
+      ],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    }
+  ]
+}
