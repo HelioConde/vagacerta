@@ -66,6 +66,17 @@
 
       <aside class="ad-slot" aria-label="Publicidade" data-ad-slot="dashboard"><span>Publicidade</span><small>Espaço preparado para anúncios não intrusivos.</small></aside>
 
+      <section class="followup-section panel-lite" aria-labelledby="followup-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow" data-vc-i18n="followUpEyebrow">PRÓXIMOS RETORNOS</p>
+            <h2 id="followup-title" data-vc-i18n="followUpTitle">Follow-ups que precisam de atenção</h2>
+          </div>
+          <p data-vc-i18n="followUpHelp">Conclua ou adie sem perder o histórico da candidatura.</p>
+        </div>
+        <div id="follow-up-list" class="follow-up-list" aria-live="polite"></div>
+      </section>
+
       <section class="board-section">
         <div class="section-heading">
           <div>
@@ -109,9 +120,34 @@
             <option value="rejected">Encerrada</option>
           </select>
         </label>
-        <label class="field"><span>Compatibilidade (%)</span><input name="matchScore" type="number" min="0" max="100" step="1" placeholder="Ex.: 82"></label>
+        <label class="field"><span data-vc-i18n="calculatedMatch">Compatibilidade calculada</span><input name="matchScore" type="number" min="0" max="100" step="1" readonly placeholder="—"></label>
         <label class="field"><span>Pretensão / salário</span><input name="salary" maxlength="80" placeholder="Ex.: R$ 2.500 ou a combinar"></label>
       </div>
+
+      <label class="field"><span data-vc-i18n="requirementsTitle">Compatibilidade explicada por requisito</span>
+        <textarea name="requirements" maxlength="4000" data-vc-placeholder="requirementsPlaceholder" placeholder="+ React&#10;+ HTML/CSS&#10;- TypeScript&#10;? Inglês avançado"></textarea>
+        <small class="field-hint" data-vc-i18n="requirementsHint">Uma linha por requisito: + atendido, - ausente, ? não comprovado. O score é calculado apenas com evidências confirmadas.</small>
+      </label>
+      <div id="match-breakdown" class="match-breakdown" aria-live="polite"></div>
+
+      <div class="form-grid">
+        <label class="field"><span data-vc-i18n="followUpDate">Data do follow-up</span><input name="followUpAt" type="date"></label>
+        <label class="field"><span data-vc-i18n="followUpStatus">Estado do follow-up</span>
+          <select name="followUpStatus">
+            <option value="pending" data-vc-i18n="pending">Pendente</option>
+            <option value="completed" data-vc-i18n="completed">Concluído</option>
+            <option value="postponed" data-vc-i18n="postponed">Adiado</option>
+          </select>
+        </label>
+      </div>
+
+      <fieldset class="form-section">
+        <legend data-vc-i18n="interviewPrep">Preparação de entrevista</legend>
+        <label class="field"><span data-vc-i18n="interviewQuestions">Perguntas para treinar</span><textarea name="interviewQuestions" maxlength="3000" data-vc-placeholder="interviewQuestionsPlaceholder" placeholder="Uma pergunta por linha"></textarea></label>
+        <label class="field"><span data-vc-i18n="reviewPoints">Pontos para revisar</span><textarea name="interviewReview" maxlength="2500" data-vc-placeholder="reviewPointsPlaceholder" placeholder="React hooks&#10;APIs REST&#10;Projeto principal"></textarea></label>
+        <label class="field"><span data-vc-i18n="interviewNotes">Notas da entrevista</span><textarea name="interviewNotes" maxlength="3000"></textarea></label>
+      </fieldset>
+
       <label class="field"><span>Próxima ação / anotações</span><textarea name="notes" maxlength="1500" placeholder="Ex.: revisar portfólio e fazer follow-up em 5 dias"></textarea></label>
       <div class="dialog-actions">
         <button id="delete-application" class="button danger" type="button" hidden>Excluir</button>
@@ -147,6 +183,24 @@
       <button id="sign-out" class="button ghost full" type="button">Sair da conta</button>
     </div>
     <p id="account-message" class="form-message" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog id="documents-dialog" class="dialog documents-dialog" aria-labelledby="documents-title">
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow" data-vc-i18n="resumeVersionsEyebrow">CURRÍCULOS DA CANDIDATURA</p>
+        <h2 id="documents-title" data-vc-i18n="resumeVersions">Versões personalizadas</h2>
+      </div>
+      <button class="icon-button" id="documents-close" type="button" aria-label="Fechar">×</button>
+    </div>
+    <p class="dialog-copy" data-vc-i18n="resumeVersionsHelp">Cada versão fica ligada a esta candidatura e nunca sobrescreve seu currículo-base.</p>
+    <form id="document-form">
+      <label class="field"><span data-vc-i18n="versionName">Nome da versão</span><input name="title" maxlength="120" required placeholder="Ex.: Front-End React — Empresa Aurora"></label>
+      <label class="field"><span data-vc-i18n="resumeContent">Conteúdo do currículo</span><textarea name="content" maxlength="20000" rows="12" required></textarea></label>
+      <button class="button primary full" type="submit" data-vc-i18n="saveNewVersion">Salvar nova versão</button>
+    </form>
+    <div id="document-list" class="document-list" aria-live="polite"></div>
+    <p id="documents-message" class="form-message" role="status" aria-live="polite"></p>
   </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
