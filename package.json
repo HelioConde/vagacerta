@@ -1,0 +1,11 @@
+{
+  "name": "vagacerta",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "screenshots": "node scripts/capture-site.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.0"
+  }
+}
