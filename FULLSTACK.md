@@ -28,21 +28,22 @@ Dados privados são protegidos por RLS.
 - mudança de status direto no card;
 - busca por empresa, cargo ou anotação;
 - filtro por status;
-- score de compatibilidade opcional;
+- compatibilidade explicada por requisito (`+` atendido, `-` ausente, `?` não comprovado) com score calculado;
 - salário/pretensão;
 - link da vaga;
 - métricas de total, candidaturas, entrevistas e compatibilidade média;
+- fila de follow-up com data, atrasados, concluir e adiar;
+- versões personalizadas de currículo por candidatura;
+- preparação de entrevista com perguntas, revisão e notas;
 - layout responsivo;
-- CI validando o frontend dedicado.
+- Browser E2E do fluxo principal;
+- workflows QA e GitHub Pages.
 
-## Próximas entregas de produto — ordem obrigatória
+## Diferenciais do gate
 
-1. **Score de compatibilidade explicado por requisito** — requisitos atendidos, ausentes e não comprovados; nenhuma nota opaca.
-2. **Currículos personalizados em `vagacerta_documents`** — manter currículo-base e versões por candidatura.
-3. **Follow-up** — data, fila de pendências, concluir/adiar e destaque de atrasados.
-4. **Preparação de entrevista ligada à candidatura** — perguntas, checklist e notas.
+Os quatro diferenciais foram implementados em 07/10/2026. A migration necessária está versionada em `supabase/migrations/20261007_vagacerta_product_gate.sql` e ainda precisa ser aplicada no Supabase compartilhado antes de considerar a sincronização em nuvem concluída.
 
-Somente depois deste bloco:
+Somente depois de validar este bloco:
 - importação de vaga por URL quando houver integração permitida;
 - IA somente via backend/Edge Function;
 - automações adicionais baseadas em feedback real.
@@ -62,12 +63,12 @@ Isolamento RLS, duplicidade, URLs inválidas, troca de status, score 0–100, mo
 
 ## Gate para sair da implementação pesada
 
-- [ ] os quatro diferenciais acima funcionam no modo local;
-- [ ] persistência/sincronização funcionam com conta autenticada;
+- [x] os quatro diferenciais acima implementados no modo local;
+- [ ] persistência/sincronização funcionam com conta autenticada após aplicar migration;
 - [ ] RLS de documentos e candidaturas validada entre dois usuários;
-- [ ] PT-BR/EN cobrem os novos fluxos;
-- [ ] mobile e teclado utilizáveis;
-- [ ] Browser E2E cobre criação → candidatura → follow-up → entrevista;
+- [x] PT-BR/EN cobrem os novos fluxos;
+- [ ] mobile e teclado utilizáveis no ambiente publicado;
+- [x] Browser E2E cobre criação → candidatura → follow-up → currículo → entrevista;
 - [ ] GitHub Pages/CI verdes;
 - [ ] nenhum P0/P1 conhecido.
 
