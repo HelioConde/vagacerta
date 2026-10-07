@@ -1,11 +1,11 @@
 # Visual audit
 
-Generated: 2026-10-07T08:53:39.097Z
+Generated: 2026-10-07T08:54:50.736Z
 
 ## desktop-full.png
 
 - Viewport: 1440×1000
-- Page: 1440×1081
+- Page: 1440×1129
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<10px): 2
@@ -20,7 +20,7 @@ Generated: 2026-10-07T08:53:39.097Z
 ## mobile-full.png
 
 - Viewport: 390×844
-- Page: 390×1652
+- Page: 390×1700
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<10px): 2
