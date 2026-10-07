@@ -602,14 +602,53 @@ async function saveCloud(item) {
     updated_at: new Date(item.updatedAt).toISOString()
   };
 
-  const { data, error } = await supabaseClient
+  let result = await supabaseClient
     .from('vagacerta_applications')
     .upsert(payload, { onConflict: 'id' })
     .select('*')
     .single();
 
-  if (error) throw error;
-  return mapRow(data);
+  if (result.error) {
+    const message = String(result.error.message || '').toLowerCase();
+    const schemaPending = ['requirements','follow_up_at','follow_up_status','interview_prep','schema cache','column']
+      .some(token => message.includes(token));
+
+    if (!schemaPending) throw result.error;
+
+    const legacyPayload = {
+      id: payload.id,
+      user_id: payload.user_id,
+      company: payload.company,
+      role: payload.role,
+      url: payload.url,
+      status: payload.status,
+      match_score: payload.match_score,
+      salary: payload.salary,
+      notes: payload.notes,
+      applied_at: payload.applied_at,
+      created_at: payload.created_at,
+      updated_at: payload.updated_at
+    };
+
+    result = await supabaseClient
+      .from('vagacerta_applications')
+      .upsert(legacyPayload, { onConflict: 'id' })
+      .select('*')
+      .single();
+
+    if (result.error) throw result.error;
+
+    return normalizeLocal({
+      ...mapRow(result.data),
+      requirements: item.requirements,
+      followUpAt: item.followUpAt,
+      followUpStatus: item.followUpStatus,
+      interviewPrep: item.interviewPrep,
+      matchScore: item.matchScore
+    });
+  }
+
+  return mapRow(result.data);
 }
 
 async function loadCloud() {
