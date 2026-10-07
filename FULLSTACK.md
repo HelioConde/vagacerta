@@ -35,14 +35,17 @@ Dados privados são protegidos por RLS.
 - layout responsivo;
 - CI validando o frontend dedicado.
 
-## Próximas entregas de produto
+## Próximas entregas de produto — ordem obrigatória
 
-- currículos personalizados em `vagacerta_documents`;
-- score de compatibilidade explicado por requisito;
-- data e lembrete de follow-up;
-- preparação de entrevista ligada à candidatura;
+1. **Score de compatibilidade explicado por requisito** — requisitos atendidos, ausentes e não comprovados; nenhuma nota opaca.
+2. **Currículos personalizados em `vagacerta_documents`** — manter currículo-base e versões por candidatura.
+3. **Follow-up** — data, fila de pendências, concluir/adiar e destaque de atrasados.
+4. **Preparação de entrevista ligada à candidatura** — perguntas, checklist e notas.
+
+Somente depois deste bloco:
 - importação de vaga por URL quando houver integração permitida;
-- IA somente via backend/Edge Function.
+- IA somente via backend/Edge Function;
+- automações adicionais baseadas em feedback real.
 
 ## Idiomas
 
@@ -55,3 +58,17 @@ O produto é preparado para monetização por anúncios. Os espaços publicitár
 ## QA obrigatório
 
 Isolamento RLS, duplicidade, URLs inválidas, troca de status, score 0–100, mobile, teclado, estados loading/erro/vazio e importação local → nuvem.
+
+
+## Gate para sair da implementação pesada
+
+- [ ] os quatro diferenciais acima funcionam no modo local;
+- [ ] persistência/sincronização funcionam com conta autenticada;
+- [ ] RLS de documentos e candidaturas validada entre dois usuários;
+- [ ] PT-BR/EN cobrem os novos fluxos;
+- [ ] mobile e teclado utilizáveis;
+- [ ] Browser E2E cobre criação → candidatura → follow-up → entrevista;
+- [ ] GitHub Pages/CI verdes;
+- [ ] nenhum P0/P1 conhecido.
+
+Até cumprir esse gate, VagaCerta é **produto em desenvolvimento**, não MVP finalizado.
