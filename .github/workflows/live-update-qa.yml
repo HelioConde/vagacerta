@@ -9,7 +9,8 @@ jobs:
           set -e
           test -f live-update.js
           test -f version.json
-          test -f .github/workflows/live-version.yml
+          # GitHub Pages now stamps version.json in the published artifact.
+          grep -q 'Stamp deploy version' .github/workflows/pages.yml
           grep -q 'live-update.js' index.html
           grep -q '12_000' live-update.js
           grep -q visibilitychange live-update.js
