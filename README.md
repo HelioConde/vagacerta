@@ -6,7 +6,7 @@ Organizador de candidaturas com funil, métricas e sincronização.
 
 > **Os quatro diferenciais do gate foram implementados em 07/10/2026. O projeto entra agora em validação de infraestrutura/QA antes de ser marcado como MVP finalizado.**
 
-A fundação fullstack e os quatro diferenciais já estão implementados. O que resta é aplicar a migration no `pizzaria-db`, validar RLS/sincronização real e confirmar QA/Pages verdes.
+A fundação fullstack e os quatro diferenciais já estão implementados. Migration aplicada em 12/10/2026; a proteção de propriedade entre documentos e candidaturas foi reforçada. Restam teste com duas contas e habilitação do GitHub Pages para homologação.
 
 - frontend próprio;
 - modo local quando aplicável;
@@ -59,9 +59,10 @@ Implementado no GitHub:
 
 Ainda depende de validação externa:
 
-- [ ] aplicar a migration no `pizzaria-db`;
-- [ ] validar duas contas/dispositivos e isolamento RLS;
-- [ ] confirmar Actions/Pages verdes;
+- [x] migration aplicada no `pizzaria-db` em 12/10/2026;
+- [ ] validar duas contas/dispositivos e isolamento RLS em teste real (policy restritiva aplicada e conferida);
+- [x] Browser E2E, Static QA e Live Update QA verdes após correção de i18n;
+- [ ] habilitar GitHub Pages em Settings > Pages > Source: GitHub Actions, confirmar deploy verde;
 - [ ] revisar mobile/teclado no ambiente publicado.
 
 Importação automática de vaga por URL e IA generativa ficam depois desse gate. IA, quando usada, deve permanecer exclusivamente no backend.
