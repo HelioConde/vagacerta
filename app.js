@@ -130,7 +130,7 @@ function applyLanguage() {
   } : null;
 
   if (replacements) {
-    const eyebrow = document.querySelectorAll('.eyebrow');
+    const eyebrow = document.querySelectorAll('.eyebrow:not([data-vc-i18n])');
     replacements['.eyebrow'].forEach((text, i) => { if (eyebrow[i]) eyebrow[i].textContent = text; });
     document.querySelector('.hero h1').innerHTML = 'Miss fewer opportunities.<br><span>Make every next step clear.</span>';
     document.querySelector('.hero-copy').textContent = replacements['.hero-copy'];
@@ -144,11 +144,11 @@ function applyLanguage() {
     document.querySelector('.metrics article:nth-child(2) span').textContent = replacements['.metrics article:nth-child(2) span'];
     document.querySelector('.metrics article:nth-child(3) span').textContent = replacements['.metrics article:nth-child(3) span'];
     document.querySelector('.metrics article:nth-child(4) span').textContent = replacements['.metrics article:nth-child(4) span'];
-    document.querySelector('.section-heading h2').textContent = replacements['.section-heading h2'];
-    document.querySelector('.section-heading > p').textContent = replacements['.section-heading > p'];
+    document.querySelector('.board-section .section-heading h2').textContent = replacements['.section-heading h2'];
+    document.querySelector('.board-section .section-heading > p').textContent = replacements['.section-heading > p'];
     document.querySelector('.footer small').textContent = replacements['.footer small'];
   } else {
-    const eyebrow = document.querySelectorAll('.eyebrow');
+    const eyebrow = document.querySelectorAll('.eyebrow:not([data-vc-i18n])');
     ['ORGANIZADOR DE CANDIDATURAS','FUNIL DE CANDIDATURAS','CANDIDATURA','SUA CONTA'].forEach((text,i)=>{if(eyebrow[i]) eyebrow[i].textContent=text;});
     document.querySelector('.hero h1').innerHTML = 'Menos vagas perdidas.<br><span>Mais próximos passos claros.</span>';
     document.querySelector('.hero-copy').textContent = 'Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.';
@@ -162,8 +162,8 @@ function applyLanguage() {
     document.querySelector('.metrics article:nth-child(2) span').textContent = 'Candidatadas';
     document.querySelector('.metrics article:nth-child(3) span').textContent = 'Entrevistas';
     document.querySelector('.metrics article:nth-child(4) span').textContent = 'Compatibilidade média';
-    document.querySelector('.section-heading h2').textContent = 'Onde cada vaga está agora';
-    document.querySelector('.section-heading > p').textContent = 'Altere o status diretamente em cada card.';
+    document.querySelector('.board-section .section-heading h2').textContent = 'Onde cada vaga está agora';
+    document.querySelector('.board-section .section-heading > p').textContent = 'Altere o status diretamente em cada card.';
     document.querySelector('.footer small').textContent = 'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.';
   }
 
