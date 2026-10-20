@@ -1,0 +1,19 @@
+{
+  "name": "VagaCerta — Organizador de candidaturas",
+  "short_name": "VagaCerta",
+  "description": "Organize candidaturas, etapas, compatibilidade e próximos passos da sua busca por emprego.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7f4",
+  "theme_color": "#174a34",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
