@@ -201,7 +201,7 @@ function applyLanguage() {
     document.querySelector('.metrics article:nth-child(3) span').textContent = replacements['.metrics article:nth-child(3) span'];
     document.querySelector('.metrics article:nth-child(4) span').textContent = replacements['.metrics article:nth-child(4) span'];
     document.querySelector('.board-section .section-heading h2').textContent = replacements['.section-heading h2'];
-    document.querySelector('.board-section .section-heading > p').textContent = replacements['.section-heading > p'];
+    document.querySelector('.board-section [data-vc-i18n="boardHelp"]').textContent = replacements['.section-heading > p'];
     document.querySelector('.footer small').textContent = replacements['.footer small'];
   } else {
     const eyebrow = document.querySelectorAll('.eyebrow:not([data-vc-i18n])');
@@ -219,7 +219,7 @@ function applyLanguage() {
     document.querySelector('.metrics article:nth-child(3) span').textContent = 'Entrevistas';
     document.querySelector('.metrics article:nth-child(4) span').textContent = 'Compatibilidade média';
     document.querySelector('.board-section .section-heading h2').textContent = 'Onde cada vaga está agora';
-    document.querySelector('.board-section .section-heading > p').textContent = 'Altere o status diretamente em cada card.';
+    document.querySelector('.board-section [data-vc-i18n="boardHelp"]').textContent = 'Altere o status diretamente em cada card.';
     document.querySelector('.footer small').textContent = 'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.';
   }
 
