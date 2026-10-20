@@ -130,7 +130,7 @@
       </div>
       <button class="icon-button" id="application-close" type="button" aria-label="Fechar">×</button>
     </div>
-    <form id="application-form">
+    <form id="application-form" novalidate>
       <input name="id" type="hidden">
       <div class="form-grid">
         <label class="field"><span data-vc-i18n="company">Empresa</span><input name="company" maxlength="120" autocomplete="organization" required aria-describedby="company-error" data-vc-placeholder="companyPlaceholder" placeholder="Ex.: Empresa Aurora"><small id="company-error" class="field-error" data-field-error="company"></small></label>
@@ -195,7 +195,7 @@
       <button class="icon-button" id="account-close" type="button" aria-label="Fechar">×</button>
     </div>
     <p class="dialog-copy" data-vc-i18n="accountHelp">Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.</p>
-    <form id="auth-form">
+    <form id="auth-form" novalidate>
       <label class="field"><span data-vc-i18n="email">E-mail</span><input name="email" type="email" autocomplete="email" required aria-describedby="auth-email-error"><small id="auth-email-error" class="field-error" data-auth-error="email"></small></label>
       <label class="field"><span data-vc-i18n="password">Senha</span><input name="password" type="password" minlength="8" autocomplete="current-password" required aria-describedby="auth-password-error"><small id="auth-password-error" class="field-error" data-auth-error="password"></small></label>
       <button class="button primary full" type="submit" data-vc-i18n="signIn">Entrar</button>
