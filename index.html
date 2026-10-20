@@ -55,7 +55,10 @@
             <option value="rejected" data-vc-i18n="statusRejectedPlural">Encerradas</option>
           </select>
         </div>
-        <button id="new-application" class="button primary" type="button" data-vc-i18n="newApplication">+ Nova candidatura</button>
+        <div class="toolbar-actions">
+          <button id="clear-filters" class="button text clear-filters" type="button" hidden data-vc-i18n="clearFilters">Limpar filtros</button>
+          <button id="new-application" class="button primary" type="button" data-vc-i18n="newApplication">+ Nova candidatura</button>
+        </div>
       </section>
 
       <section class="metrics" aria-label="Resumo">
@@ -63,6 +66,20 @@
         <article><span data-vc-i18n="metricApplied">Candidatadas</span><strong id="metric-applied">0</strong></article>
         <article><span data-vc-i18n="metricInterviews">Entrevistas</span><strong id="metric-interviews">0</strong></article>
         <article><span data-vc-i18n="metricMatch">Compatibilidade média</span><strong id="metric-score">—</strong></article>
+      </section>
+
+      <section id="empty-dashboard" class="empty-dashboard" aria-labelledby="empty-dashboard-title" hidden>
+        <div class="empty-dashboard-copy">
+          <p class="eyebrow" data-vc-i18n="quickStartEyebrow">COMECE EM 2 MINUTOS</p>
+          <h2 id="empty-dashboard-title" data-vc-i18n="quickStartTitle">Organize sua próxima candidatura sem planilha.</h2>
+          <p data-vc-i18n="quickStartCopy">Cadastre a vaga, marque a etapa e deixe o VagaCerta lembrar o próximo passo.</p>
+          <button id="empty-new-application" class="button primary" type="button" data-vc-i18n="quickStartAction">Adicionar primeira candidatura</button>
+        </div>
+        <ol class="quick-steps">
+          <li><strong>01</strong><span data-vc-i18n="quickStep1">Salve empresa, cargo e link da vaga.</span></li>
+          <li><strong>02</strong><span data-vc-i18n="quickStep2">Marque requisitos e veja a compatibilidade explicada.</span></li>
+          <li><strong>03</strong><span data-vc-i18n="quickStep3">Defina follow-up e acompanhe cada etapa no funil.</span></li>
+        </ol>
       </section>
 
       <aside class="ad-slot" aria-label="Publicidade" data-ad-slot="dashboard"><span>Publicidade</span><small>Espaço preparado para anúncios não intrusivos.</small></aside>
@@ -79,13 +96,17 @@
       </section>
 
       <section class="board-section">
-        <div class="section-heading">
+        <div class="section-heading board-heading">
           <div>
             <p class="eyebrow">FUNIL DE CANDIDATURAS</p>
             <h2 data-vc-i18n="boardTitle">Onde cada vaga está agora</h2>
           </div>
-          <p data-vc-i18n="boardHelp">Altere o status diretamente em cada card.</p>
+          <div class="board-heading-meta">
+            <p id="board-summary" class="board-summary" role="status" aria-live="polite"></p>
+            <p data-vc-i18n="boardHelp">Altere o status diretamente em cada card.</p>
+          </div>
         </div>
+        <nav id="board-nav" class="board-nav" aria-label="Etapas do funil"></nav>
         <div id="board" class="board" aria-live="polite"></div>
       </section>
     </main>
