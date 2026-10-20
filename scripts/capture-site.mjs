@@ -190,6 +190,10 @@ const captures = [
   await capture("mobile-full.png", { width: 390, height: 844 }),
   await capture("desktop-populated.png", { width: 1440, height: 1000 }, seedDashboard),
   await capture("mobile-populated.png", { width: 390, height: 844 }, seedDashboard),
+  await capture("desktop-activity-dialog.png", { width: 1440, height: 1000 }, async page => {
+    await seedDashboard(page);
+    await page.locator('[data-activity="11111111-1111-4111-8111-111111111111"]').click();
+  }),
   await capture("desktop-application-dialog.png", { width: 1440, height: 1000 }, async page => {
     await page.getByRole("button", { name: "+ Nova candidatura" }).click();
   }),
