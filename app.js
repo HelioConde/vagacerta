@@ -477,14 +477,14 @@ function cardHtml(item) {
 
   return '<article class="job-card" data-id="' + escapeHtml(item.id) + '">' +
     '<div class="card-top"><div><strong>' + escapeHtml(item.role) + '</strong><span>' + escapeHtml(item.company) + '</span></div>' +
-    '<button class="icon-button small" type="button" data-edit="' + escapeHtml(item.id) + '" aria-label="Editar candidatura">•••</button></div>' +
+    '<button class="icon-button small" type="button" data-edit="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateTr('editApplication')) + '">•••</button></div>' +
     '<div class="card-meta">' + score + followHtml +
     (item.salary ? '<span class="salary">' + escapeHtml(item.salary) + '</span>' : '') + '</div>' +
     evidenceHtml +
     (item.notes ? '<p class="card-notes">' + escapeHtml(item.notes) + '</p>' : '') +
     '<div class="card-tools"><button type="button" data-documents="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
     '<div class="card-bottom">' +
-      '<label><span>Status</span><select data-status="' + escapeHtml(item.id) + '">' +
+      '<label><span>' + escapeHtml(gateTr('statusLabel')) + '</span><select aria-label="' + escapeHtml(gateTr('statusLabel')) + '" data-status="' + escapeHtml(item.id) + '">' +
         Object.entries(STATUS).map(([value, data]) =>
           '<option value="' + value + '"' + (item.status === value ? ' selected' : '') + '>' + escapeHtml(statusText(data, 'short')) + '</option>'
         ).join('') +
