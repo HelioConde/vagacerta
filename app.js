@@ -43,6 +43,14 @@ const TEXT = {
 
 const GATE_TEXT = {
   'pt-BR': {
+    pageTitle:'VagaCerta — Organizador de candidaturas',
+    pageDescription:'Organize candidaturas, acompanhe etapas, compatibilidade e próximos passos da sua busca por emprego.',
+    skipLink:'Pular para o conteúdo', heroEyebrow:'ORGANIZADOR DE CANDIDATURAS',
+    heroCopy:'Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.',
+    inProgress:'Em andamento', activeApplications:'candidaturas ativas',
+    boardEyebrow:'FUNIL DE CANDIDATURAS', applicationEyebrow:'CANDIDATURA', accountEyebrow:'SUA CONTA',
+    close:'Fechar', accountNavLabel:'Conta', languageLabel:'Idioma / Language', filtersLabel:'Filtros de candidaturas',
+    summaryLabel:'Resumo', boardNavLabel:'Etapas do funil',
     followUpEyebrow:'PRÓXIMOS RETORNOS', followUpTitle:'Follow-ups que precisam de atenção',
     followUpHelp:'Conclua ou adie sem perder o histórico da candidatura.',
     calculatedMatch:'Compatibilidade calculada', requirementsTitle:'Compatibilidade explicada por requisito',
@@ -95,6 +103,14 @@ const GATE_TEXT = {
     cloudLoadFailed:'Não foi possível atualizar a nuvem. Seus dados locais continuam disponíveis.'
   },
   en: {
+    pageTitle:'VagaCerta — Job application tracker',
+    pageDescription:'Organize applications, track stages, match and next steps in your job search.',
+    skipLink:'Skip to content', heroEyebrow:'APPLICATION TRACKER',
+    heroCopy:'Save opportunities, track every stage and quickly see which applications need your attention.',
+    inProgress:'In progress', activeApplications:'active applications',
+    boardEyebrow:'APPLICATION FUNNEL', applicationEyebrow:'APPLICATION', accountEyebrow:'YOUR ACCOUNT',
+    close:'Close', accountNavLabel:'Account', languageLabel:'Language', filtersLabel:'Application filters',
+    summaryLabel:'Summary', boardNavLabel:'Funnel stages',
     followUpEyebrow:'NEXT FOLLOW-UPS', followUpTitle:'Follow-ups that need attention',
     followUpHelp:'Complete or postpone without losing the application history.',
     calculatedMatch:'Calculated match', requirementsTitle:'Requirement-by-requirement match',
@@ -162,6 +178,10 @@ function statusText(data, type) {
 
 function applyLanguage() {
   document.documentElement.lang = currentLang;
+  document.title = gateTr('pageTitle');
+  const description = document.querySelector('meta[name="description"]');
+  if (description) description.setAttribute('content', gateTr('pageDescription'));
+
   document.querySelectorAll('[data-lang]').forEach(button => {
     const active = button.dataset.lang === currentLang;
     button.classList.toggle('active', active);
@@ -173,6 +193,9 @@ function applyLanguage() {
   document.querySelectorAll('[data-vc-placeholder]').forEach(element => {
     element.placeholder = gateTr(element.dataset.vcPlaceholder);
   });
+  document.querySelectorAll('[data-vc-aria-label]').forEach(element => {
+    element.setAttribute('aria-label', gateTr(element.dataset.vcAriaLabel));
+  });
 
   const ad = document.querySelector('.ad-slot');
   if (ad) {
@@ -182,62 +205,9 @@ function applyLanguage() {
     if (copy) copy.textContent = tr('adCopy');
   }
 
-  const replacements = currentLang === 'en' ? {
-    '.eyebrow': ['APPLICATION TRACKER', 'APPLICATION FUNNEL', 'APPLICATION', 'YOUR ACCOUNT'],
-    '.hero h1': 'Miss fewer opportunities.\nMake every next step clear.',
-    '.hero-copy': 'Save opportunities, track every stage and quickly see which applications need your attention.',
-    '.hero-stat span': 'In progress',
-    '.hero-stat small': 'active applications',
-    '.search-wrap label': 'Search',
-    '#search': 'Company, role or note',
-    '.filter-wrap label': 'Status',
-    '#new-application': '+ New application',
-    '.metrics article:nth-child(1) span': 'Total',
-    '.metrics article:nth-child(2) span': 'Applied',
-    '.metrics article:nth-child(3) span': 'Interviews',
-    '.metrics article:nth-child(4) span': 'Average match',
-    '.section-heading h2': 'Where each opportunity stands',
-    '.section-heading > p': 'Change the status directly on each card.',
-    '.footer small': 'Without an account, data stays on this device. After signing in, it stays private in your account.'
-  } : null;
-
-  if (replacements) {
-    const eyebrow = document.querySelectorAll('.eyebrow:not([data-vc-i18n])');
-    replacements['.eyebrow'].forEach((text, i) => { if (eyebrow[i]) eyebrow[i].textContent = text; });
-    document.querySelector('.hero h1').innerHTML = 'Miss fewer opportunities.<br><span>Make every next step clear.</span>';
-    document.querySelector('.hero-copy').textContent = replacements['.hero-copy'];
-    document.querySelector('.hero-stat span').textContent = replacements['.hero-stat span'];
-    document.querySelector('.hero-stat small').textContent = replacements['.hero-stat small'];
-    document.querySelector('.search-wrap label').textContent = replacements['.search-wrap label'];
-    searchInput.placeholder = replacements['#search'];
-    document.querySelector('.filter-wrap label').textContent = replacements['.filter-wrap label'];
-    document.querySelector('#new-application').textContent = replacements['#new-application'];
-    document.querySelector('.metrics article:nth-child(1) span').textContent = replacements['.metrics article:nth-child(1) span'];
-    document.querySelector('.metrics article:nth-child(2) span').textContent = replacements['.metrics article:nth-child(2) span'];
-    document.querySelector('.metrics article:nth-child(3) span').textContent = replacements['.metrics article:nth-child(3) span'];
-    document.querySelector('.metrics article:nth-child(4) span').textContent = replacements['.metrics article:nth-child(4) span'];
-    document.querySelector('.board-section .section-heading h2').textContent = replacements['.section-heading h2'];
-    document.querySelector('.board-section [data-vc-i18n="boardHelp"]').textContent = replacements['.section-heading > p'];
-    document.querySelector('.footer small').textContent = replacements['.footer small'];
-  } else {
-    const eyebrow = document.querySelectorAll('.eyebrow:not([data-vc-i18n])');
-    ['ORGANIZADOR DE CANDIDATURAS','FUNIL DE CANDIDATURAS','CANDIDATURA','SUA CONTA'].forEach((text,i)=>{if(eyebrow[i]) eyebrow[i].textContent=text;});
-    document.querySelector('.hero h1').innerHTML = 'Menos vagas perdidas.<br><span>Mais próximos passos claros.</span>';
-    document.querySelector('.hero-copy').textContent = 'Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.';
-    document.querySelector('.hero-stat span').textContent = 'Em andamento';
-    document.querySelector('.hero-stat small').textContent = 'candidaturas ativas';
-    document.querySelector('.search-wrap label').textContent = 'Buscar';
-    searchInput.placeholder = 'Empresa, cargo ou anotação';
-    document.querySelector('.filter-wrap label').textContent = 'Status';
-    document.querySelector('#new-application').textContent = '+ Nova candidatura';
-    document.querySelector('.metrics article:nth-child(1) span').textContent = 'Total';
-    document.querySelector('.metrics article:nth-child(2) span').textContent = 'Candidatadas';
-    document.querySelector('.metrics article:nth-child(3) span').textContent = 'Entrevistas';
-    document.querySelector('.metrics article:nth-child(4) span').textContent = 'Compatibilidade média';
-    document.querySelector('.board-section .section-heading h2').textContent = 'Onde cada vaga está agora';
-    document.querySelector('.board-section [data-vc-i18n="boardHelp"]').textContent = 'Altere o status diretamente em cada card.';
-    document.querySelector('.footer small').textContent = 'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.';
-  }
+  document.querySelector('.hero h1').innerHTML = currentLang === 'en'
+    ? 'Miss fewer opportunities.<br><span>Make every next step clear.</span>'
+    : 'Menos vagas perdidas.<br><span>Mais próximos passos claros.</span>';
 
   accountOpen.textContent = currentUser ? tr('account') : tr('login');
   syncStatus.textContent = currentUser
