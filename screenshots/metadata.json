@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T03:10:34.454Z",
+  "generatedAt": "2026-10-20T03:12:15.670Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -10,30 +10,12 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 1440,
-      "height": 1147,
+      "height": 1347,
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
-      "smallTapTargets": [
-        {
-          "tag": "a",
-          "id": "",
-          "className": "skip-link",
-          "width": 144,
-          "height": 18,
-          "text": "Pular para o conteúdo"
-        }
-      ],
-      "tinyText": [
-        {
-          "text": "Publicidade",
-          "fontSize": 9
-        },
-        {
-          "text": "Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.",
-          "fontSize": 9.16667
-        }
-      ],
+      "smallTapTargets": [],
+      "tinyText": [],
       "brokenImages": [],
       "consoleErrors": [],
       "failedRequests": []
@@ -46,30 +28,66 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 390,
-      "height": 1748,
+      "height": 2083,
       "viewportWidth": 390,
       "viewportHeight": 844,
       "overflow": [],
-      "smallTapTargets": [
-        {
-          "tag": "a",
-          "id": "",
-          "className": "skip-link",
-          "width": 144,
-          "height": 18,
-          "text": "Pular para o conteúdo"
-        }
-      ],
-      "tinyText": [
-        {
-          "text": "Publicidade",
-          "fontSize": 9
-        },
-        {
-          "text": "Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.",
-          "fontSize": 9.16667
-        }
-      ],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "desktop-application-dialog.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 1440,
+      "height": 1347,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "mobile-application-dialog.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 390,
+      "height": 2083,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "desktop-en.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 1440,
+      "height": 1276,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
       "brokenImages": [],
       "consoleErrors": [],
       "failedRequests": []
