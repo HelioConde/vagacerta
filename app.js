@@ -82,6 +82,8 @@ const GATE_TEXT = {
     followCompleted:'Concluído', followPending:'Pendente', followPostponed:'Adiado',
     footerPrivacy:'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.',
     addOpportunity:'Adicionar oportunidade', editApplication:'Editar candidatura',
+    editApplicationFor:'Editar candidatura {role} · {company}', activityFor:'Atividade de {role} · {company}',
+    resumesFor:'Currículos de {role} · {company}', statusFor:'Status de {role} em {company}', openJobFor:'Abrir vaga de {role} em {company}', reviewFor:'Revisar {role} · {company}',
     company:'Empresa', companyPlaceholder:'Ex.: Empresa Aurora', role:'Cargo', rolePlaceholder:'Ex.: Front-End Júnior',
     jobLink:'Link da vaga', salary:'Pretensão / salário', salaryPlaceholder:'Ex.: R$ 2.500 ou a combinar',
     notes:'Próxima ação / anotações', notesPlaceholder:'Ex.: revisar portfólio e fazer follow-up em 5 dias',
@@ -150,6 +152,8 @@ const GATE_TEXT = {
     followCompleted:'Completed', followPending:'Pending', followPostponed:'Postponed',
     footerPrivacy:'Without an account, data stays on this device. After signing in, it stays private in your account.',
     addOpportunity:'Add opportunity', editApplication:'Edit application',
+    editApplicationFor:'Edit application {role} · {company}', activityFor:'Activity for {role} · {company}',
+    resumesFor:'Resumes for {role} · {company}', statusFor:'Status for {role} at {company}', openJobFor:'Open job for {role} at {company}', reviewFor:'Review {role} · {company}',
     company:'Company', companyPlaceholder:'Example: Aurora Company', role:'Role', rolePlaceholder:'Example: Junior Front-End Developer',
     jobLink:'Job link', salary:'Salary / expectation', salaryPlaceholder:'Example: R$ 2,500 or negotiable',
     notes:'Next action / notes', notesPlaceholder:'Example: review portfolio and follow up in 5 days',
@@ -182,6 +186,14 @@ const GATE_TEXT = {
 
 function gateTr(key) {
   return GATE_TEXT[currentLang]?.[key] || GATE_TEXT['pt-BR'][key] || key;
+}
+
+function gateFmt(key, values = {}) {
+  let output = gateTr(key);
+  for (const [name, value] of Object.entries(values)) {
+    output = output.replaceAll('{' + name + '}', String(value ?? ''));
+  }
+  return output;
 }
 
 function tr(key) {
@@ -557,19 +569,19 @@ function cardHtml(item) {
 
   return '<article class="job-card" data-id="' + escapeHtml(item.id) + '">' +
     '<div class="card-top"><div><strong>' + escapeHtml(item.role) + '</strong><span>' + escapeHtml(item.company) + '</span></div>' +
-    '<button class="icon-button small" type="button" data-edit="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateTr('editApplication')) + '">•••</button></div>' +
+    '<button class="icon-button small" type="button" data-edit="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateFmt('editApplicationFor', { role:item.role, company:item.company })) + '">•••</button></div>' +
     '<div class="card-meta">' + score + followHtml +
     (item.salary ? '<span class="salary">' + escapeHtml(item.salary) + '</span>' : '') + '</div>' +
     evidenceHtml +
     (item.notes ? '<p class="card-notes">' + escapeHtml(item.notes) + '</p>' : '') +
-    '<div class="card-tools"><button type="button" data-activity="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('activity')) + '</button><button type="button" data-documents="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
+    '<div class="card-tools"><button type="button" data-activity="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateFmt('activityFor', { role:item.role, company:item.company })) + '">' + escapeHtml(gateTr('activity')) + '</button><button type="button" data-documents="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateFmt('resumesFor', { role:item.role, company:item.company })) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
     '<div class="card-bottom">' +
-      '<label><span>' + escapeHtml(gateTr('statusLabel')) + '</span><select aria-label="' + escapeHtml(gateTr('statusLabel')) + '" data-status="' + escapeHtml(item.id) + '">' +
+      '<label><span>' + escapeHtml(gateTr('statusLabel')) + '</span><select aria-label="' + escapeHtml(gateFmt('statusFor', { role:item.role, company:item.company })) + '" data-status="' + escapeHtml(item.id) + '">' +
         Object.entries(STATUS).map(([value, data]) =>
           '<option value="' + value + '"' + (item.status === value ? ' selected' : '') + '>' + escapeHtml(statusText(data, 'short')) + '</option>'
         ).join('') +
       '</select></label>' +
-      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + tr('openJob') + '</a>' : '') +
+      (href ? '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer" aria-label="' + escapeHtml(gateFmt('openJobFor', { role:item.role, company:item.company })) + '">' + tr('openJob') + '</a>' : '') +
     '</div>' +
   '</article>';
 }
@@ -664,7 +676,7 @@ function renderProductivity() {
   attentionList.innerHTML = attention.length ? attention.map(({item,priority,reason}) =>
     '<article class="attention-item ' + (priority === 0 ? 'priority' : '') + '">' +
       '<div class="attention-copy"><strong>' + escapeHtml(item.role + ' · ' + item.company) + '</strong><span>' + escapeHtml(reason) + '</span></div>' +
-      '<button type="button" data-attention-edit="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('reviewApplication')) + '</button>' +
+      '<button type="button" data-attention-edit="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(gateFmt('reviewFor', { role:item.role, company:item.company })) + '">' + escapeHtml(gateTr('reviewApplication')) + '</button>' +
     '</article>'
   ).join('') : '<div class="follow-up-empty">' + escapeHtml(gateTr('noAttention')) + '</div>';
 }
