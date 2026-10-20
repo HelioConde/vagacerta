@@ -1,20 +1,36 @@
 # VagaCerta
 
-Organizador de candidaturas com funil, métricas e sincronização.
+Organizador de candidaturas com funil, produtividade, follow-ups, compatibilidade explicada e sincronização.
 
 ## Status
 
-> **Os quatro diferenciais do gate foram implementados em 07/10/2026. O projeto entra agora em validação de infraestrutura/QA antes de ser marcado como MVP finalizado.**
+> **MVP em release candidate.** A interface, os principais fluxos de produto, o QA automatizado, os snapshots visuais e o deploy via GitHub Pages estão ativos e verdes. A única validação externa importante ainda aberta é o teste real de isolamento entre duas contas autenticadas.
 
-A fundação fullstack e os quatro diferenciais já estão implementados. Migration aplicada em 12/10/2026; a proteção de propriedade entre documentos e candidaturas foi reforçada. Restam teste com duas contas e habilitação do GitHub Pages para homologação.
-
-- frontend próprio;
-- modo local quando aplicável;
-- Supabase Auth e sincronização quando aplicável;
+- frontend próprio em HTML, CSS e JavaScript;
+- modo local funcional inclusive offline;
+- Supabase Auth e sincronização por conta;
 - banco compartilhado `pizzaria-db`;
-- RLS nos dados privados;
-- GitHub Pages preparado para `https://helioconde.github.io/vagacerta/`;
-- CI próprio.
+- RLS e grants endurecidos nos dados privados;
+- GitHub Pages em `https://helioconde.github.io/vagacerta/`;
+- CI com Static QA, Browser E2E, Live Update QA e snapshots visuais;
+- PT-BR e inglês;
+- manifest, favicon, robots e sitemap para publicação.
+
+## Principais recursos
+
+- CRUD de candidaturas;
+- funil Salva → Candidatada → Entrevista → Proposta/Encerrada;
+- busca, filtro e limpeza de filtros;
+- compatibilidade explicada por requisito;
+- follow-ups com atraso, concluir e adiar;
+- preparação de entrevista;
+- versões personalizadas de currículo;
+- onboarding e estado vazio;
+- indicadores de produtividade e lista de atenção;
+- resumo de atividade por candidatura;
+- estados offline, loading e erro;
+- validação inline acessível;
+- layout responsivo e navegação mobile do funil.
 
 ## Arquivos principais
 
@@ -23,54 +39,43 @@ A fundação fullstack e os quatro diferenciais já estão implementados. Migrat
 - `app.js`
 - `supabase-config.js`
 - `FULLSTACK.md`
+- `DESIGN_SYSTEM.md`
 
 ## Backend
 
 Este projeto usa o Supabase compartilhado `pizzaria-db`. A chave no frontend é uma **publishable key**. Nunca coloque `service_role` ou segredos administrativos no navegador.
 
+As migrations do VagaCerta ficam em `supabase/migrations/`. O hardening atual remove acesso `anon`, restringe `authenticated` a CRUD e mantém ownership/RLS nos registros privados.
+
 ## Desenvolvimento
 
-Abra `index.html` por um servidor HTTP local para testar. O deploy alvo é GitHub Pages.
+Sirva a raiz do repositório por HTTP e use:
 
-## Arquitetura
+```bash
+npm install
+npm run check
+npm run test:e2e
+npm run screenshots
+```
 
-Veja `FULLSTACK.md` para regras de produto, QA, segurança e próximas etapas.
+## Gate de release
 
-## Idiomas e monetização
+Concluído:
 
-- PT-BR é o idioma principal do produto.
-- A interface também deve oferecer inglês.
-- A preferência de idioma é persistida no navegador.
-- O modelo de monetização é baseado em anúncios não intrusivos.
-- Anúncios não devem interromper cadastro, edição, leitura ou mudança de status das candidaturas.
+- [x] compatibilidade explicada por requisito;
+- [x] currículos personalizados por candidatura;
+- [x] fila de follow-up;
+- [x] preparação de entrevista;
+- [x] produtividade e resumo de atividade;
+- [x] estados loading/erro/offline;
+- [x] PT-BR/EN e ARIA localizado;
+- [x] teclado e responsividade cobertos por Playwright;
+- [x] QA, Static QA, Live Update QA e snapshots visuais verdes;
+- [x] GitHub Pages habilitado e workflow de deploy verde;
+- [x] manifest, favicon, robots e sitemap.
 
+Validação externa ainda recomendada antes de tratar o produto como release estável:
 
-## Gate atual de finalização
+- [ ] testar duas contas reais e confirmar isolamento RLS entre usuários/dispositivos.
 
-Implementado no GitHub:
-
-- [x] compatibilidade explicada por requisito, com score calculado;
-- [x] currículos personalizados versionados por candidatura;
-- [x] fila de follow-up com concluir/adiar e destaque de atrasados;
-- [x] preparação de entrevista ligada à candidatura;
-- [x] Browser E2E do fluxo principal;
-- [x] workflows QA e GitHub Pages;
-- [x] migration + RLS versionadas em `supabase/migrations/20261007_vagacerta_product_gate.sql`.
-
-Ainda depende de validação externa:
-
-- [x] migration aplicada no `pizzaria-db` em 12/10/2026;
-- [ ] validar duas contas/dispositivos e isolamento RLS em teste real (policy restritiva aplicada e conferida);
-- [x] Browser E2E, Static QA e Live Update QA verdes após correção de i18n;
-- [ ] habilitar GitHub Pages em Settings > Pages > Source: GitHub Actions, confirmar deploy verde;
-- [ ] revisar mobile/teclado no ambiente publicado.
-
-Importação automática de vaga por URL e IA generativa ficam depois desse gate. IA, quando usada, deve permanecer exclusivamente no backend.
-
-## Design e QA visual
-
-- Sistema visual documentado em `DESIGN_SYSTEM.md`.
-- Tokens de cor, tipografia, espaçamento, bordas e sombras centralizados no CSS.
-- Acessibilidade cobre skip link, foco visível, labels persistentes, `aria-describedby`, redução de movimento e alvos mínimos.
-- Playwright cobre fluxo principal, PT-BR/EN, teclado, responsividade e ausência de texto menor que 11 px.
-- Snapshots automáticos cobrem desktop, mobile, diálogo de candidatura e estado em inglês.
+Importação automática de vaga por URL e IA generativa ficam fora do gate atual. IA, quando usada, deve permanecer exclusivamente no backend.
