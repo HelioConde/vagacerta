@@ -1,11 +1,11 @@
 # Visual audit
 
-Generated: 2026-10-20T03:25:21.055Z
+Generated: 2026-10-20T03:26:33.705Z
 
 ## desktop-full.png
 
 - Viewport: 1440×1000
-- Page: 1440×1645
+- Page: 1440×1941
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -16,7 +16,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## mobile-full.png
 
 - Viewport: 390×844
-- Page: 390×2710
+- Page: 390×3334
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -27,7 +27,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## desktop-populated.png
 
 - Viewport: 1440×1000
-- Page: 1440×1792
+- Page: 1440×2090
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -38,7 +38,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## mobile-populated.png
 
 - Viewport: 390×844
-- Page: 390×2713
+- Page: 390×3436
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -49,7 +49,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## desktop-application-dialog.png
 
 - Viewport: 1440×1000
-- Page: 1440×1645
+- Page: 1440×1941
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -60,7 +60,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## mobile-application-dialog.png
 
 - Viewport: 390×844
-- Page: 390×2710
+- Page: 390×3334
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -71,7 +71,7 @@ Generated: 2026-10-20T03:25:21.055Z
 ## desktop-en.png
 
 - Viewport: 1440×1000
-- Page: 1440×1574
+- Page: 1440×1871
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
