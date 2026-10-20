@@ -66,6 +66,11 @@ const GATE_TEXT = {
     quickStartCopy:'Cadastre a vaga, marque a etapa e deixe o VagaCerta lembrar o próximo passo.', quickStartAction:'Adicionar primeira candidatura',
     quickStep1:'Salve empresa, cargo e link da vaga.', quickStep2:'Marque requisitos e veja a compatibilidade explicada.', quickStep3:'Defina follow-up e acompanhe cada etapa no funil.',
     resultsOne:'1 candidatura exibida', resultsMany:'{count} candidaturas exibidas',
+    productivityEyebrow:'RITMO DA BUSCA', productivityTitle:'O que precisa da sua atenção agora', productivityHelp:'Indicadores calculados com suas candidaturas atuais.',
+    productivityNew:'Novas em 7 dias', productivityFollowUps:'Follow-ups em 7 dias', productivityAdvanced:'Etapas avançadas', productivityNeedsAction:'Sem próximo passo',
+    noAttention:'Nenhuma pendência crítica agora.', attentionOverdue:'Follow-up atrasado', attentionNoNext:'Sem follow-up ou próxima ação definida', attentionStale:'Sem atualização há mais de 7 dias', reviewApplication:'Revisar',
+    activityEyebrow:'ATIVIDADE DA CANDIDATURA', activityTitle:'Resumo da atividade', activity:'Atividade', activityCreated:'Oportunidade adicionada', activityApplied:'Candidatura iniciada', activityFollowUp:'Follow-up', activityUpdated:'Última atualização', activityCurrent:'Etapa atual',
+    followCompleted:'Concluído', followPending:'Pendente', followPostponed:'Adiado',
     footerPrivacy:'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.',
     addOpportunity:'Adicionar oportunidade', editApplication:'Editar candidatura',
     company:'Empresa', companyPlaceholder:'Ex.: Empresa Aurora', role:'Cargo', rolePlaceholder:'Ex.: Front-End Júnior',
@@ -113,6 +118,11 @@ const GATE_TEXT = {
     quickStartCopy:'Save the job, mark the stage and let VagaCerta keep the next step visible.', quickStartAction:'Add first application',
     quickStep1:'Save company, role and job link.', quickStep2:'Mark requirements and see an explained match score.', quickStep3:'Set a follow-up and track every stage in the funnel.',
     resultsOne:'1 application shown', resultsMany:'{count} applications shown',
+    productivityEyebrow:'SEARCH MOMENTUM', productivityTitle:'What needs your attention now', productivityHelp:'Indicators calculated from your current applications.',
+    productivityNew:'New in 7 days', productivityFollowUps:'Follow-ups in 7 days', productivityAdvanced:'Advanced stages', productivityNeedsAction:'No next step',
+    noAttention:'No critical items right now.', attentionOverdue:'Overdue follow-up', attentionNoNext:'No follow-up or next action defined', attentionStale:'No update for more than 7 days', reviewApplication:'Review',
+    activityEyebrow:'APPLICATION ACTIVITY', activityTitle:'Activity summary', activity:'Activity', activityCreated:'Opportunity added', activityApplied:'Application started', activityFollowUp:'Follow-up', activityUpdated:'Last update', activityCurrent:'Current stage',
+    followCompleted:'Completed', followPending:'Pending', followPostponed:'Postponed',
     footerPrivacy:'Without an account, data stays on this device. After signing in, it stays private in your account.',
     addOpportunity:'Add opportunity', editApplication:'Edit application',
     company:'Company', companyPlaceholder:'Example: Aurora Company', role:'Role', rolePlaceholder:'Example: Junior Front-End Developer',
@@ -262,6 +272,10 @@ const documentList = document.querySelector('#document-list');
 const documentsMessage = document.querySelector('#documents-message');
 const connectionBanner = document.querySelector('#connection-banner');
 const connectionBannerText = document.querySelector('#connection-banner-text');
+const attentionList = document.querySelector('#attention-list');
+const activityDialog = document.querySelector('#activity-dialog');
+const activitySubtitle = document.querySelector('#activity-subtitle');
+const activityTimeline = document.querySelector('#activity-timeline');
 
 
 function setFieldError(form, name, message, attribute = 'data-field-error') {
@@ -564,7 +578,7 @@ function cardHtml(item) {
     (item.salary ? '<span class="salary">' + escapeHtml(item.salary) + '</span>' : '') + '</div>' +
     evidenceHtml +
     (item.notes ? '<p class="card-notes">' + escapeHtml(item.notes) + '</p>' : '') +
-    '<div class="card-tools"><button type="button" data-documents="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
+    '<div class="card-tools"><button type="button" data-activity="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('activity')) + '</button><button type="button" data-documents="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('resumes')) + '</button></div>' +
     '<div class="card-bottom">' +
       '<label><span>' + escapeHtml(gateTr('statusLabel')) + '</span><select aria-label="' + escapeHtml(gateTr('statusLabel')) + '" data-status="' + escapeHtml(item.id) + '">' +
         Object.entries(STATUS).map(([value, data]) =>
@@ -611,7 +625,98 @@ function renderBoard() {
   }
 
   renderMetrics();
+  renderProductivity();
   renderFollowUps();
+}
+
+
+function startOfTodayMs() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return '';
+  return date.toLocaleString(currentLang === 'en' ? 'en-US' : 'pt-BR', {
+    dateStyle:'medium', timeStyle:'short'
+  });
+}
+
+function renderProductivity() {
+  const all = visibleItems().map(normalizeLocal);
+  const now = Date.now();
+  const sevenDays = 7 * 86400000;
+  const today = todayKey();
+  const nextWeek = addDays(today, 7);
+
+  const recent = all.filter(item => now - Number(item.createdAt) <= sevenDays && now >= Number(item.createdAt)).length;
+  const followUps = all.filter(item => item.followUpAt && item.followUpStatus !== 'completed' && item.followUpAt >= today && item.followUpAt <= nextWeek).length;
+  const advanced = all.filter(item => ['interview','offer'].includes(item.status)).length;
+  const active = all.filter(item => !['rejected','offer'].includes(item.status));
+  const needsAction = active.filter(item => !item.followUpAt && !item.notes.trim()).length;
+
+  const set = (selector, value) => {
+    const node = document.querySelector(selector);
+    if (node) node.textContent = String(value);
+  };
+  set('#productivity-new', recent);
+  set('#productivity-followups', followUps);
+  set('#productivity-advanced', advanced);
+  set('#productivity-needs-action', needsAction);
+
+  if (!attentionList) return;
+  const attention = active.map(item => {
+    const overdue = item.followUpAt && item.followUpStatus !== 'completed' && item.followUpAt < today;
+    const noNext = !item.followUpAt && !item.notes.trim();
+    const stale = now - Number(item.updatedAt) > sevenDays;
+    const priority = overdue ? 0 : noNext ? 1 : stale ? 2 : 99;
+    const reason = overdue ? gateTr('attentionOverdue') : noNext ? gateTr('attentionNoNext') : stale ? gateTr('attentionStale') : '';
+    return { item, priority, reason };
+  }).filter(entry => entry.priority < 99)
+    .sort((a,b) => a.priority - b.priority || Number(a.item.updatedAt) - Number(b.item.updatedAt))
+    .slice(0,5);
+
+  attentionList.innerHTML = attention.length ? attention.map(({item,priority,reason}) =>
+    '<article class="attention-item ' + (priority === 0 ? 'priority' : '') + '">' +
+      '<div class="attention-copy"><strong>' + escapeHtml(item.role + ' · ' + item.company) + '</strong><span>' + escapeHtml(reason) + '</span></div>' +
+      '<button type="button" data-attention-edit="' + escapeHtml(item.id) + '">' + escapeHtml(gateTr('reviewApplication')) + '</button>' +
+    '</article>'
+  ).join('') : '<div class="follow-up-empty">' + escapeHtml(gateTr('noAttention')) + '</div>';
+}
+
+function activityEvents(item) {
+  const events = [];
+  if (item.createdAt) {
+    events.push({ at:Number(item.createdAt), title:gateTr('activityCreated'), detail:item.role + ' · ' + item.company });
+  }
+  if (item.appliedAt) {
+    const appliedMs = Date.parse(item.appliedAt);
+    if (Number.isFinite(appliedMs)) events.push({ at:appliedMs, title:gateTr('activityApplied'), detail:statusText(STATUS[item.status], 'short') });
+  }
+  if (item.followUpAt) {
+    const followMs = Date.parse(item.followUpAt + 'T12:00:00');
+    const state = item.followUpStatus === 'completed' ? gateTr('followCompleted') : item.followUpStatus === 'postponed' ? gateTr('followPostponed') : gateTr('followPending');
+    events.push({ at:followMs, title:gateTr('activityFollowUp'), detail:state });
+  }
+  if (item.updatedAt && Math.abs(Number(item.updatedAt) - Number(item.createdAt)) > 60000) {
+    events.push({ at:Number(item.updatedAt), title:gateTr('activityUpdated'), detail:statusText(STATUS[item.status], 'short') });
+  }
+  events.push({ at:Date.now() + 1, title:gateTr('activityCurrent'), detail:statusText(STATUS[item.status], 'short'), current:true });
+  return events.sort((x,y) => x.at - y.at);
+}
+
+function openActivity(id) {
+  const item = visibleItems().map(normalizeLocal).find(entry => entry.id === id);
+  if (!item || !activityDialog || !activityTimeline) return;
+  activitySubtitle.textContent = item.role + ' · ' + item.company;
+  activityTimeline.innerHTML = activityEvents(item).map(event =>
+    '<li><span class="activity-marker" aria-hidden="true"></span><div class="activity-copy"><strong>' +
+      escapeHtml(event.title) + '</strong><span>' + escapeHtml(event.detail) + '</span>' +
+      (event.current ? '' : '<time datetime="' + escapeHtml(new Date(event.at).toISOString()) + '">' + escapeHtml(formatDateTime(event.at)) + '</time>') +
+    '</div></li>'
+  ).join('');
+  activityDialog.showModal();
 }
 
 function renderFollowUps() {
@@ -1010,6 +1115,8 @@ deleteButton.addEventListener('click', async () => {
 board.addEventListener('click', event => {
   const edit = event.target.closest('[data-edit]');
   if (edit) { openEdit(edit.dataset.edit); return; }
+  const activity = event.target.closest('[data-activity]');
+  if (activity) { openActivity(activity.dataset.activity); return; }
   const docs = event.target.closest('[data-documents]');
   if (docs) openDocuments(docs.dataset.documents);
 });
@@ -1037,6 +1144,13 @@ board.addEventListener('change', async event => {
     select.disabled = false;
   }
 });
+
+attentionList?.addEventListener('click', event => {
+  const button = event.target.closest('[data-attention-edit]');
+  if (button) openEdit(button.dataset.attentionEdit);
+});
+document.querySelector('#activity-close')?.addEventListener('click', () => activityDialog.close());
+activityDialog?.addEventListener('click', event => { if (event.target === activityDialog) activityDialog.close(); });
 
 followUpList?.addEventListener('click', async event => {
   const done = event.target.closest('[data-follow-done]');
