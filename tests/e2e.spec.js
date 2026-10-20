@@ -61,11 +61,28 @@ test("application flows through explained match, follow-up, resume and interview
   await expect(page.locator("#follow-up-list")).not.toContainText("Empresa Aurora");
 });
 
-test("language switch translates the new product-gate controls", async ({ page }) => {
+test("language switch translates the complete application and account flows", async ({ page }) => {
   await page.locator('[data-lang="en"]').click();
+
+  await expect(page.getByRole("button", { name: "+ New application" })).toBeVisible();
+  await expect(page.getByPlaceholder("Company, role or note")).toBeVisible();
+  await expect(page.getByText("Where each opportunity stands")).toBeVisible();
+
   await page.getByRole("button", { name: "+ New application" }).click();
+  await expect(page.getByText("Add opportunity")).toBeVisible();
+  await expect(page.getByText("Company", { exact: true })).toBeVisible();
+  await expect(page.getByText("Role", { exact: true })).toBeVisible();
+  await expect(page.getByText("Salary / expectation")).toBeVisible();
   await expect(page.getByText("Requirement-by-requirement match")).toBeVisible();
   await expect(page.getByText("Interview preparation")).toBeVisible();
-  await page.locator("#cancel-application").click();
+  await expect(page.getByRole("button", { name: "Save application" })).toBeVisible();
+  await page.getByRole("button", { name: "Cancel" }).click();
+
   await expect(page.getByText("Follow-ups that need attention")).toBeVisible();
+
+  await page.getByRole("button", { name: "Sign in / sync" }).click();
+  await expect(page.getByText("Sync your job search")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Create account" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Forgot password" })).toBeVisible();
 });
