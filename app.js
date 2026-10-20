@@ -56,7 +56,31 @@ const GATE_TEXT = {
     versionName:'Nome da versão', resumeContent:'Conteúdo do currículo', saveNewVersion:'Salvar nova versão',
     noFollowUps:'Nenhum follow-up pendente.', dueToday:'vence hoje', overdue:'atrasado', due:'previsto para',
     finish:'Concluir', postpone7:'Adiar 7 dias', resumes:'Currículos', noVersions:'Nenhuma versão personalizada ainda.',
-    met:'atendidos', missing:'ausentes', unknown:'não comprovados', evidence:'evidências'
+    met:'atendidos', missing:'ausentes', unknown:'não comprovados', evidence:'evidências',
+    searchLabel:'Buscar', searchPlaceholder:'Empresa, cargo ou anotação', statusLabel:'Status', allStatuses:'Todos',
+    statusSavedPlural:'Salvas', statusAppliedPlural:'Candidatadas', statusInterviewPlural:'Entrevistas', statusOfferPlural:'Propostas', statusRejectedPlural:'Encerradas',
+    statusSaved:'Salva', statusApplied:'Candidatada', statusInterview:'Entrevista', statusOffer:'Proposta', statusRejected:'Encerrada',
+    newApplication:'+ Nova candidatura', metricTotal:'Total', metricApplied:'Candidatadas', metricInterviews:'Entrevistas', metricMatch:'Compatibilidade média',
+    boardTitle:'Onde cada vaga está agora', boardHelp:'Altere o status diretamente em cada card.',
+    footerPrivacy:'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.',
+    addOpportunity:'Adicionar oportunidade', editApplication:'Editar candidatura',
+    company:'Empresa', companyPlaceholder:'Ex.: Empresa Aurora', role:'Cargo', rolePlaceholder:'Ex.: Front-End Júnior',
+    jobLink:'Link da vaga', salary:'Pretensão / salário', salaryPlaceholder:'Ex.: R$ 2.500 ou a combinar',
+    notes:'Próxima ação / anotações', notesPlaceholder:'Ex.: revisar portfólio e fazer follow-up em 5 dias',
+    delete:'Excluir', cancel:'Cancelar', saveApplication:'Salvar candidatura',
+    syncSearch:'Sincronize sua busca', accountHelp:'Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.',
+    email:'E-mail', password:'Senha', signIn:'Entrar', signUp:'Criar conta', forgotPassword:'Esqueci a senha',
+    connectedAs:'Conectado como', importLocal:'Importar candidaturas deste dispositivo', signOut:'Sair da conta',
+    savingCloud:'Salvando na nuvem…', savingLocal:'Salvando neste dispositivo…', updatedApplication:'Candidatura atualizada.',
+    addedApplication:'Candidatura adicionada.', saveFailed:'Não foi possível salvar. Confira sua conexão e tente novamente.',
+    confirmDelete:'Excluir esta candidatura?', deletedApplication:'Candidatura excluída.', deleteFailed:'Não foi possível excluir.',
+    statusUpdated:'Status atualizado.', statusUpdateFailed:'Não foi possível atualizar o status.',
+    signingIn:'Entrando…', accountConnected:'Conta conectada.', creatingAccount:'Criando conta…',
+    accountCreatedConnected:'Conta criada e conectada.', accountCreatedConfirm:'Conta criada. Confirme seu e-mail e depois entre.',
+    emailPasswordRequired:'Informe um e-mail e uma senha com pelo menos 8 caracteres.', emailRequired:'Informe seu e-mail primeiro.',
+    resetSent:'Se o e-mail estiver cadastrado, enviaremos um link de recuperação.', signOutFailed:'Não foi possível sair.', signedOut:'Você saiu da conta.',
+    invalidCredentials:'E-mail ou senha incorretos.', emailNotConfirmed:'Confirme seu e-mail antes de entrar.', alreadyRegistered:'Este e-mail já possui conta.',
+    passwordMin:'Use uma senha com pelo menos 8 caracteres.', authGeneric:'Não foi possível concluir. Confira os dados e tente novamente.'
   },
   en: {
     followUpEyebrow:'NEXT FOLLOW-UPS', followUpTitle:'Follow-ups that need attention',
@@ -72,7 +96,31 @@ const GATE_TEXT = {
     versionName:'Version name', resumeContent:'Resume content', saveNewVersion:'Save new version',
     noFollowUps:'No pending follow-ups.', dueToday:'due today', overdue:'overdue', due:'due',
     finish:'Complete', postpone7:'Postpone 7 days', resumes:'Resumes', noVersions:'No tailored version yet.',
-    met:'met', missing:'missing', unknown:'unverified', evidence:'evidence'
+    met:'met', missing:'missing', unknown:'unverified', evidence:'evidence',
+    searchLabel:'Search', searchPlaceholder:'Company, role or note', statusLabel:'Status', allStatuses:'All',
+    statusSavedPlural:'Saved', statusAppliedPlural:'Applied', statusInterviewPlural:'Interviews', statusOfferPlural:'Offers', statusRejectedPlural:'Closed',
+    statusSaved:'Saved', statusApplied:'Applied', statusInterview:'Interview', statusOffer:'Offer', statusRejected:'Closed',
+    newApplication:'+ New application', metricTotal:'Total', metricApplied:'Applied', metricInterviews:'Interviews', metricMatch:'Average match',
+    boardTitle:'Where each opportunity stands', boardHelp:'Change the status directly on each card.',
+    footerPrivacy:'Without an account, data stays on this device. After signing in, it stays private in your account.',
+    addOpportunity:'Add opportunity', editApplication:'Edit application',
+    company:'Company', companyPlaceholder:'Example: Aurora Company', role:'Role', rolePlaceholder:'Example: Junior Front-End Developer',
+    jobLink:'Job link', salary:'Salary / expectation', salaryPlaceholder:'Example: R$ 2,500 or negotiable',
+    notes:'Next action / notes', notesPlaceholder:'Example: review portfolio and follow up in 5 days',
+    delete:'Delete', cancel:'Cancel', saveApplication:'Save application',
+    syncSearch:'Sync your job search', accountHelp:'Sign in to access your applications on other devices. Your records remain private with RLS.',
+    email:'Email', password:'Password', signIn:'Sign in', signUp:'Create account', forgotPassword:'Forgot password',
+    connectedAs:'Connected as', importLocal:'Import applications from this device', signOut:'Sign out',
+    savingCloud:'Saving to cloud…', savingLocal:'Saving on this device…', updatedApplication:'Application updated.',
+    addedApplication:'Application added.', saveFailed:'Could not save. Check your connection and try again.',
+    confirmDelete:'Delete this application?', deletedApplication:'Application deleted.', deleteFailed:'Could not delete.',
+    statusUpdated:'Status updated.', statusUpdateFailed:'Could not update status.',
+    signingIn:'Signing in…', accountConnected:'Account connected.', creatingAccount:'Creating account…',
+    accountCreatedConnected:'Account created and connected.', accountCreatedConfirm:'Account created. Confirm your email, then sign in.',
+    emailPasswordRequired:'Enter an email and a password with at least 8 characters.', emailRequired:'Enter your email first.',
+    resetSent:'If the email is registered, we will send a recovery link.', signOutFailed:'Could not sign out.', signedOut:'You signed out.',
+    invalidCredentials:'Incorrect email or password.', emailNotConfirmed:'Confirm your email before signing in.', alreadyRegistered:'This email already has an account.',
+    passwordMin:'Use a password with at least 8 characters.', authGeneric:'Could not complete the action. Check your details and try again.'
   }
 };
 
@@ -503,7 +551,7 @@ function resetForm() {
   renderMatchBreakdown([]);
   deleteButton.hidden = true;
   formMessage.textContent = '';
-  document.querySelector('#application-title').textContent = 'Adicionar oportunidade';
+  document.querySelector('#application-title').textContent = gateTr('addOpportunity');
 }
 
 function openNew() {
@@ -533,7 +581,7 @@ function openEdit(id) {
   renderMatchBreakdown(item.requirements);
   deleteButton.hidden = false;
   formMessage.textContent = '';
-  document.querySelector('#application-title').textContent = 'Editar candidatura';
+  document.querySelector('#application-title').textContent = gateTr('editApplication');
   applicationDialog.showModal();
 }
 
@@ -704,25 +752,25 @@ async function removeItem(id) {
 
 function authErrorText(error) {
   const message = String(error?.message || '').toLowerCase();
-  if (message.includes('invalid login credentials')) return 'E-mail ou senha incorretos.';
-  if (message.includes('email not confirmed')) return 'Confirme seu e-mail antes de entrar.';
-  if (message.includes('already registered')) return 'Este e-mail já possui conta.';
-  if (message.includes('password should be at least')) return 'Use uma senha com pelo menos 8 caracteres.';
-  return 'Não foi possível concluir. Confira os dados e tente novamente.';
+  if (message.includes('invalid login credentials')) return gateTr('invalidCredentials');
+  if (message.includes('email not confirmed')) return gateTr('emailNotConfirmed');
+  if (message.includes('already registered')) return gateTr('alreadyRegistered');
+  if (message.includes('password should be at least')) return gateTr('passwordMin');
+  return gateTr('authGeneric');
 }
 
 function updateAccountUi() {
   accountOpen.disabled = !supabaseClient;
-  accountOpen.textContent = currentUser ? 'Minha conta' : 'Entrar / sincronizar';
+  accountOpen.textContent = currentUser ? tr('account') : tr('login');
   syncStatus.textContent = currentUser
-    ? (loading ? 'Sincronizando…' : 'Nuvem · ' + (currentUser.email || 'conectado'))
-    : (supabaseClient ? 'Modo local' : 'Modo local · nuvem indisponível');
+    ? (loading ? (currentLang === 'en' ? 'Syncing…' : 'Sincronizando…') : tr('cloud') + ' · ' + (currentUser.email || (currentLang === 'en' ? 'connected' : 'conectado')))
+    : (supabaseClient ? tr('local') : tr('localOffline'));
 
   accountForm.hidden = Boolean(currentUser) || !supabaseClient;
   accountProfile.hidden = !currentUser;
 
   if (currentUser) {
-    document.querySelector('#account-email').textContent = currentUser.email || 'Conta conectada';
+    document.querySelector('#account-email').textContent = currentUser.email || gateTr('accountConnected');
     importLocalButton.hidden = readLocal().length === 0;
   }
 }
@@ -825,15 +873,15 @@ applicationForm.addEventListener('submit', async event => {
   const item = formToItem(existing || null);
   const submit = applicationForm.querySelector('[type="submit"]');
   submit.disabled = true;
-  formMessage.textContent = currentUser ? 'Salvando na nuvem…' : 'Salvando neste dispositivo…';
+  formMessage.textContent = currentUser ? gateTr('savingCloud') : gateTr('savingLocal');
 
   try {
     await persistItem(item);
     applicationDialog.close();
-    showToast(existing ? 'Candidatura atualizada.' : 'Candidatura adicionada.');
+    showToast(existing ? gateTr('updatedApplication') : gateTr('addedApplication'));
   } catch (error) {
     console.error(error);
-    formMessage.textContent = 'Não foi possível salvar. Confira sua conexão e tente novamente.';
+    formMessage.textContent = gateTr('saveFailed');
   } finally {
     submit.disabled = false;
   }
@@ -841,15 +889,15 @@ applicationForm.addEventListener('submit', async event => {
 
 deleteButton.addEventListener('click', async () => {
   const id = applicationForm.elements.id.value;
-  if (!id || !window.confirm('Excluir esta candidatura?')) return;
+  if (!id || !window.confirm(gateTr('confirmDelete'))) return;
   deleteButton.disabled = true;
   try {
     await removeItem(id);
     applicationDialog.close();
-    showToast('Candidatura excluída.');
+    showToast(gateTr('deletedApplication'));
   } catch (error) {
     console.error(error);
-    formMessage.textContent = 'Não foi possível excluir.';
+    formMessage.textContent = gateTr('deleteFailed');
   } finally {
     deleteButton.disabled = false;
   }
@@ -876,11 +924,11 @@ board.addEventListener('change', async event => {
   select.disabled = true;
   try {
     await persistItem(item);
-    showToast('Status atualizado.');
+    showToast(gateTr('statusUpdated'));
   } catch (error) {
     console.error(error);
     select.value = previous;
-    showToast('Não foi possível atualizar o status.');
+    showToast(gateTr('statusUpdateFailed'));
   } finally {
     select.disabled = false;
   }
@@ -947,14 +995,14 @@ accountForm.addEventListener('submit', async event => {
   if (!supabaseClient) return;
   const submit = accountForm.querySelector('[type="submit"]');
   submit.disabled = true;
-  accountMessage.textContent = 'Entrando…';
+  accountMessage.textContent = gateTr('signingIn');
   try {
     const { error } = await supabaseClient.auth.signInWithPassword({
       email: accountForm.elements.email.value.trim(),
       password: accountForm.elements.password.value
     });
     if (error) throw error;
-    accountMessage.textContent = 'Conta conectada.';
+    accountMessage.textContent = gateTr('accountConnected');
   } catch (error) {
     accountMessage.textContent = authErrorText(error);
   } finally {
@@ -967,18 +1015,18 @@ document.querySelector('#sign-up').addEventListener('click', async () => {
   const email = accountForm.elements.email.value.trim();
   const password = accountForm.elements.password.value;
   if (!email || password.length < 8) {
-    accountMessage.textContent = 'Informe um e-mail e uma senha com pelo menos 8 caracteres.';
+    accountMessage.textContent = gateTr('emailPasswordRequired');
     return;
   }
   const button = document.querySelector('#sign-up');
   button.disabled = true;
-  accountMessage.textContent = 'Criando conta…';
+  accountMessage.textContent = gateTr('creatingAccount');
   try {
     const { data, error } = await supabaseClient.auth.signUp({ email, password });
     if (error) throw error;
     accountMessage.textContent = data.session
-      ? 'Conta criada e conectada.'
-      : 'Conta criada. Confirme seu e-mail e depois entre.';
+      ? gateTr('accountCreatedConnected')
+      : gateTr('accountCreatedConfirm');
   } catch (error) {
     accountMessage.textContent = authErrorText(error);
   } finally {
@@ -990,7 +1038,7 @@ document.querySelector('#reset-password').addEventListener('click', async () => 
   if (!supabaseClient) return;
   const email = accountForm.elements.email.value.trim();
   if (!email) {
-    accountMessage.textContent = 'Informe seu e-mail primeiro.';
+    accountMessage.textContent = gateTr('emailRequired');
     return;
   }
   try {
@@ -998,7 +1046,7 @@ document.querySelector('#reset-password').addEventListener('click', async () => 
       redirectTo: window.location.href.split('#')[0]
     });
     if (error) throw error;
-    accountMessage.textContent = 'Se o e-mail estiver cadastrado, enviaremos um link de recuperação.';
+    accountMessage.textContent = gateTr('resetSent');
   } catch (error) {
     accountMessage.textContent = authErrorText(error);
   }
@@ -1007,7 +1055,7 @@ document.querySelector('#reset-password').addEventListener('click', async () => 
 document.querySelector('#sign-out').addEventListener('click', async () => {
   if (!supabaseClient) return;
   const { error } = await supabaseClient.auth.signOut();
-  accountMessage.textContent = error ? 'Não foi possível sair.' : 'Você saiu da conta.';
+  accountMessage.textContent = error ? gateTr('signOutFailed') : gateTr('signedOut');
 });
 
 importLocalButton.addEventListener('click', importLocal);
