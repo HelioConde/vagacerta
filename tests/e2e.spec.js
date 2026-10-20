@@ -83,7 +83,7 @@ test("language switch translates the complete application and account flows", as
   await page.locator("#account-dialog").evaluate(dialog => dialog.showModal());
   await page.locator("#auth-form").evaluate(form => { form.hidden = false; });
   await expect(page.getByText("Sync your job search")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Create account" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Forgot password" })).toBeVisible();
 });
@@ -135,4 +135,42 @@ test("keyboard navigation and mobile layout remain accessible", async ({ page })
   expect(layout.bodyWidth).toBeLessThanOrEqual(layout.viewportWidth);
   expect(layout.tinyText).toBe(0);
   expect(layout.smallTargets).toBe(0);
+});
+
+
+test("empty state guides first use and filters can be reset", async ({ page }) => {
+  await expect(page.locator("#empty-dashboard")).toBeVisible();
+  await expect(page.getByText("Organize sua próxima candidatura sem planilha.")).toBeVisible();
+  await page.getByRole("button", { name: "Adicionar primeira candidatura" }).click();
+  await expect(page.locator("#application-dialog")).toBeVisible();
+
+  await page.locator('[name="company"]').fill("Empresa Teste");
+  await page.locator('[name="role"]').fill("Produto");
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await expect(page.locator("#empty-dashboard")).toBeHidden();
+  await expect(page.locator("#board-summary")).toHaveText("1 candidatura exibida");
+
+  await page.locator("#search").fill("não existe");
+  await expect(page.locator("#board-summary")).toHaveText("0 candidaturas exibidas");
+  await expect(page.getByRole("button", { name: "Limpar filtros" })).toBeVisible();
+
+  await page.getByRole("button", { name: "Limpar filtros" }).click();
+  await expect(page.locator("#search")).toHaveValue("");
+  await expect(page.locator("#board-summary")).toHaveText("1 candidatura exibida");
+});
+
+test("mobile funnel navigation jumps between stages", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#board-nav")).toBeVisible();
+
+  const interviewButton = page.locator('[data-column-jump="interview"]');
+  await expect(interviewButton).toContainText("Entrevistas");
+  await interviewButton.click();
+
+  await expect(page.locator("#column-interview")).toBeFocused();
+  const box = await page.locator("#column-interview").boundingBox();
+  expect(box).not.toBeNull();
+  expect(box.x).toBeGreaterThanOrEqual(-2);
+  expect(box.x).toBeLessThan(390);
 });
