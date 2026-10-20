@@ -174,3 +174,44 @@ test("mobile funnel navigation jumps between stages", async ({ page }) => {
   expect(box.x).toBeGreaterThanOrEqual(-2);
   expect(box.x).toBeLessThan(390);
 });
+
+
+test("application validation is inline and moves focus to the first invalid field", async ({ page }) => {
+  await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await expect(page.locator('[name="company"]')).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator('[data-field-error="company"]')).toHaveText("Informe a empresa.");
+  await expect(page.locator('[name="company"]')).toBeFocused();
+  await expect(page.locator('[data-field-error="role"]')).toHaveText("Informe o cargo.");
+
+  await page.locator('[name="company"]').fill("Empresa Validação");
+  await page.locator('[name="role"]').fill("Desenvolvedor");
+  await page.locator('[name="url"]').fill("link-invalido");
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await expect(page.locator('[name="company"]')).toHaveAttribute("aria-invalid", "false");
+  await expect(page.locator('[name="role"]')).toHaveAttribute("aria-invalid", "false");
+  await expect(page.locator('[name="url"]')).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator('[data-field-error="url"]')).toContainText("link válido");
+  await expect(page.locator('[name="url"]')).toBeFocused();
+});
+
+test("offline state is explicit and local mode keeps working", async ({ page, context }) => {
+  await context.setOffline(true);
+  await page.evaluate(() => window.dispatchEvent(new Event("offline")));
+
+  await expect(page.locator("#connection-banner")).toBeVisible();
+  await expect(page.locator("#connection-banner")).toContainText("modo local continua disponível");
+
+  await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  await page.locator('[name="company"]').fill("Empresa Offline");
+  await page.locator('[name="role"]').fill("UX Engineer");
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await expect(page.locator(".job-card").filter({ hasText: "Empresa Offline" })).toBeVisible();
+
+  await context.setOffline(false);
+  await page.evaluate(() => window.dispatchEvent(new Event("online")));
+  await expect(page.locator("#connection-banner")).toBeHidden();
+});
