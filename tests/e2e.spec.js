@@ -215,3 +215,40 @@ test("offline state is explicit and local mode keeps working", async ({ page, co
   await page.evaluate(() => window.dispatchEvent(new Event("online")));
   await expect(page.locator("#connection-banner")).toBeHidden();
 });
+
+
+test("productivity insights and activity summary reflect application state", async ({ page }) => {
+  await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  await page.locator('[name="company"]').fill("Empresa Ritmo");
+  await page.locator('[name="role"]').fill("Product Engineer");
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await expect(page.locator("#productivity-new")).toHaveText("1");
+  await expect(page.locator("#productivity-needs-action")).toHaveText("1");
+  await expect(page.locator("#attention-list")).toContainText("Empresa Ritmo");
+  await expect(page.locator("#attention-list")).toContainText("Sem follow-up ou próxima ação definida");
+
+  const card = page.locator(".job-card").filter({ hasText: "Empresa Ritmo" });
+  await card.getByRole("button", { name: "Atividade" }).click();
+
+  await expect(page.locator("#activity-dialog")).toBeVisible();
+  await expect(page.locator("#activity-subtitle")).toContainText("Product Engineer · Empresa Ritmo");
+  await expect(page.locator("#activity-timeline")).toContainText("Oportunidade adicionada");
+  await expect(page.locator("#activity-timeline")).toContainText("Etapa atual");
+  await page.locator("#activity-close").click();
+
+  await card.locator("[data-status]").selectOption("interview");
+  await expect(page.locator("#productivity-advanced")).toHaveText("1");
+});
+
+test("attention list opens the application for review", async ({ page }) => {
+  await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  await page.locator('[name="company"]').fill("Empresa Atenção");
+  await page.locator('[name="role"]').fill("UX Designer");
+  await page.getByRole("button", { name: "Salvar candidatura" }).click();
+
+  await page.locator('[data-attention-edit]').click();
+  await expect(page.locator("#application-dialog")).toBeVisible();
+  await expect(page.locator('[name="company"]')).toHaveValue("Empresa Atenção");
+  await expect(page.locator('[name="role"]')).toHaveValue("UX Designer");
+});
