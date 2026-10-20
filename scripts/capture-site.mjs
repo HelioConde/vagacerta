@@ -8,7 +8,7 @@ await fs.mkdir(outputDir, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 
-async function capture(name, viewport) {
+async function capture(name, viewport, prepare = null) {
   const page = await browser.newPage({ viewport });
   const consoleErrors = [];
   const failedRequests = [];
@@ -24,7 +24,11 @@ async function capture(name, viewport) {
   });
 
   await page.goto(baseUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
-  await page.waitForTimeout(1800);
+  await page.waitForTimeout(1200);
+  if (prepare) {
+    await prepare(page);
+    await page.waitForTimeout(250);
+  }
 
   const audit = await page.evaluate(() => {
     const visible = element => {
@@ -60,16 +64,6 @@ async function capture(name, viewport) {
 
     const smallTapTargets = [...document.querySelectorAll("button,a,input,select,textarea,[role='button']")]
       .filter(element => visible(element))
-      .filter(element => {
-        if (element instanceof HTMLInputElement && (element.type === "checkbox" || element.type === "radio")) {
-          const label = element.closest("label");
-          if (label && visible(label)) {
-            const rect = label.getBoundingClientRect();
-            if (rect.width >= 36 && rect.height >= 36) return false;
-          }
-        }
-        return true;
-      })
       .map(element => {
         const rect = element.getBoundingClientRect();
         return {
@@ -90,7 +84,7 @@ async function capture(name, viewport) {
         text: String(element.textContent || "").trim().slice(0, 90),
         fontSize: Number.parseFloat(getComputedStyle(element).fontSize)
       }))
-      .filter(item => item.fontSize > 0 && item.fontSize < 10)
+      .filter(item => item.fontSize > 0 && item.fontSize < 11)
       .slice(0, 30);
 
     const brokenImages = [...document.images]
@@ -125,7 +119,16 @@ async function capture(name, viewport) {
 
 const captures = [
   await capture("desktop-full.png", { width: 1440, height: 1000 }),
-  await capture("mobile-full.png", { width: 390, height: 844 })
+  await capture("mobile-full.png", { width: 390, height: 844 }),
+  await capture("desktop-application-dialog.png", { width: 1440, height: 1000 }, async page => {
+    await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  }),
+  await capture("mobile-application-dialog.png", { width: 390, height: 844 }, async page => {
+    await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  }),
+  await capture("desktop-en.png", { width: 1440, height: 1000 }, async page => {
+    await page.locator('[data-lang="en"]').click();
+  })
 ];
 
 await browser.close();
@@ -137,6 +140,7 @@ for (const capture of captures) {
   if (capture.consoleErrors.length) failures.push(`${capture.name}: ${capture.consoleErrors.length} console error(s)`);
   if (capture.failedRequests.length) failures.push(`${capture.name}: ${capture.failedRequests.length} failed request(s)`);
   if (capture.brokenImages.length) failures.push(`${capture.name}: ${capture.brokenImages.length} broken image(s)`);
+  if (capture.tinyText.length) failures.push(`${capture.name}: ${capture.tinyText.length} text node(s) below 11px`);
   if (capture.viewportWidth <= 420 && capture.smallTapTargets.length) {
     failures.push(`${capture.name}: ${capture.smallTapTargets.length} small tap target(s)`);
   }
@@ -152,7 +156,7 @@ for (const capture of captures) {
   lines.push(`- Page: ${capture.width}×${capture.height}`);
   lines.push(`- Overflow elements: ${capture.overflow.length}`);
   lines.push(`- Small tap targets: ${capture.smallTapTargets.length}`);
-  lines.push(`- Tiny text nodes (<10px): ${capture.tinyText.length}`);
+  lines.push(`- Tiny text nodes (<11px): ${capture.tinyText.length}`);
   lines.push(`- Console errors: ${capture.consoleErrors.length}`);
   lines.push(`- Failed requests: ${capture.failedRequests.length}`);
   lines.push(`- Broken images: ${capture.brokenImages.length}`, "");
@@ -166,10 +170,12 @@ for (const capture of captures) {
     lines.push("### Tiny text", ...capture.tinyText.map(item => `- ${item.fontSize}px — ${item.text}`), "");
   }
 }
+
 await fs.writeFile(path.join(outputDir, "visual-audit.md"), lines.join("\n"));
 
 if (failures.length) {
   console.error("Visual quality issues detected:\n" + failures.map(item => "- " + item).join("\n"));
+  process.exitCode = 1;
 } else {
   console.log("Visual quality gate passed.");
 }
