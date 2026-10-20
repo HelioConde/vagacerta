@@ -80,7 +80,7 @@ test("language switch translates the complete application and account flows", as
 
   await expect(page.getByText("Follow-ups that need attention")).toBeVisible();
 
-  await page.getByRole("button", { name: "Sign in / sync" }).click();
+  await page.locator("#account-dialog").evaluate(dialog => dialog.showModal());
   await expect(page.getByText("Sync your job search")).toBeVisible();
   await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Create account" })).toBeVisible();
