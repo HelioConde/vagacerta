@@ -61,7 +61,11 @@ const GATE_TEXT = {
     statusSavedPlural:'Salvas', statusAppliedPlural:'Candidatadas', statusInterviewPlural:'Entrevistas', statusOfferPlural:'Propostas', statusRejectedPlural:'Encerradas',
     statusSaved:'Salva', statusApplied:'Candidatada', statusInterview:'Entrevista', statusOffer:'Proposta', statusRejected:'Encerrada',
     newApplication:'+ Nova candidatura', metricTotal:'Total', metricApplied:'Candidatadas', metricInterviews:'Entrevistas', metricMatch:'Compatibilidade média',
-    boardTitle:'Onde cada vaga está agora', boardHelp:'Altere o status diretamente em cada card.',
+    boardTitle:'Onde cada vaga está agora', boardHelp:'Altere o status diretamente em cada card.', clearFilters:'Limpar filtros',
+    quickStartEyebrow:'COMECE EM 2 MINUTOS', quickStartTitle:'Organize sua próxima candidatura sem planilha.',
+    quickStartCopy:'Cadastre a vaga, marque a etapa e deixe o VagaCerta lembrar o próximo passo.', quickStartAction:'Adicionar primeira candidatura',
+    quickStep1:'Salve empresa, cargo e link da vaga.', quickStep2:'Marque requisitos e veja a compatibilidade explicada.', quickStep3:'Defina follow-up e acompanhe cada etapa no funil.',
+    resultsOne:'1 candidatura exibida', resultsMany:'{count} candidaturas exibidas',
     footerPrivacy:'Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.',
     addOpportunity:'Adicionar oportunidade', editApplication:'Editar candidatura',
     company:'Empresa', companyPlaceholder:'Ex.: Empresa Aurora', role:'Cargo', rolePlaceholder:'Ex.: Front-End Júnior',
@@ -101,7 +105,11 @@ const GATE_TEXT = {
     statusSavedPlural:'Saved', statusAppliedPlural:'Applied', statusInterviewPlural:'Interviews', statusOfferPlural:'Offers', statusRejectedPlural:'Closed',
     statusSaved:'Saved', statusApplied:'Applied', statusInterview:'Interview', statusOffer:'Offer', statusRejected:'Closed',
     newApplication:'+ New application', metricTotal:'Total', metricApplied:'Applied', metricInterviews:'Interviews', metricMatch:'Average match',
-    boardTitle:'Where each opportunity stands', boardHelp:'Change the status directly on each card.',
+    boardTitle:'Where each opportunity stands', boardHelp:'Change the status directly on each card.', clearFilters:'Clear filters',
+    quickStartEyebrow:'START IN 2 MINUTES', quickStartTitle:'Organize your next application without a spreadsheet.',
+    quickStartCopy:'Save the job, mark the stage and let VagaCerta keep the next step visible.', quickStartAction:'Add first application',
+    quickStep1:'Save company, role and job link.', quickStep2:'Mark requirements and see an explained match score.', quickStep3:'Set a follow-up and track every stage in the funnel.',
+    resultsOne:'1 application shown', resultsMany:'{count} applications shown',
     footerPrivacy:'Without an account, data stays on this device. After signing in, it stays private in your account.',
     addOpportunity:'Add opportunity', editApplication:'Edit application',
     company:'Company', companyPlaceholder:'Example: Aurora Company', role:'Role', rolePlaceholder:'Example: Junior Front-End Developer',
@@ -223,6 +231,11 @@ function applyLanguage() {
 }
 
 const board = document.querySelector('#board');
+const boardNav = document.querySelector('#board-nav');
+const boardSummary = document.querySelector('#board-summary');
+const emptyDashboard = document.querySelector('#empty-dashboard');
+const emptyNewApplication = document.querySelector('#empty-new-application');
+const clearFiltersButton = document.querySelector('#clear-filters');
 const searchInput = document.querySelector('#search');
 const statusFilter = document.querySelector('#status-filter');
 const applicationDialog = document.querySelector('#application-dialog');
@@ -495,12 +508,21 @@ function cardHtml(item) {
 }
 
 function renderBoard() {
+  const all = visibleItems().map(normalizeLocal);
   const items = filteredItems();
   const grouped = Object.fromEntries(Object.keys(STATUS).map(key => [key, []]));
   items.forEach(item => grouped[item.status].push(item));
 
+  const hasFilters = Boolean(searchInput.value.trim() || statusFilter.value);
+  if (emptyDashboard) emptyDashboard.hidden = all.length > 0;
+  if (clearFiltersButton) clearFiltersButton.hidden = !hasFilters;
+  if (boardSummary) {
+    const template = items.length === 1 ? gateTr('resultsOne') : gateTr('resultsMany');
+    boardSummary.textContent = template.replace('{count}', String(items.length));
+  }
+
   board.innerHTML = Object.entries(STATUS).map(([key, data]) =>
-    '<section class="column" data-column="' + key + '">' +
+    '<section class="column" id="column-' + key + '" data-column="' + key + '" tabindex="-1">' +
       '<header><span>' + escapeHtml(statusText(data, 'label')) + '</span><strong>' + grouped[key].length + '</strong></header>' +
       '<div class="column-list">' +
         (grouped[key].length
@@ -509,6 +531,15 @@ function renderBoard() {
       '</div>' +
     '</section>'
   ).join('');
+
+  if (boardNav) {
+    boardNav.innerHTML = Object.entries(STATUS).map(([key, data]) =>
+      '<button type="button" data-column-jump="' + key + '">' +
+        escapeHtml(statusText(data, 'label')) +
+        '<span class="count">' + grouped[key].length + '</span>' +
+      '</button>'
+    ).join('');
+  }
 
   renderMetrics();
   renderFollowUps();
@@ -962,6 +993,20 @@ applicationForm.elements.requirements.addEventListener('input', event => {
 
 searchInput.addEventListener('input', renderBoard);
 statusFilter.addEventListener('change', renderBoard);
+clearFiltersButton?.addEventListener('click', () => {
+  searchInput.value = '';
+  statusFilter.value = '';
+  renderBoard();
+  searchInput.focus();
+});
+emptyNewApplication?.addEventListener('click', openNew);
+boardNav?.addEventListener('click', event => {
+  const button = event.target.closest('[data-column-jump]');
+  if (!button) return;
+  const column = document.querySelector('#column-' + button.dataset.columnJump);
+  column?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+  window.setTimeout(() => column?.focus({ preventScroll: true }), 220);
+});
 
 document.querySelector('#documents-close').addEventListener('click', () => documentsDialog.close());
 documentsDialog.addEventListener('click', event => { if (event.target === documentsDialog) documentsDialog.close(); });
