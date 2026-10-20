@@ -85,6 +85,21 @@ Evitar valores arbitrários quando um valor da escala resolver o mesmo problema.
 - O onboarding desaparece assim que houver ao menos uma candidatura.
 - Evitar ilustrações decorativas se elas não ajudarem a entender a próxima ação.
 
+### Produtividade e atenção
+
+- Indicadores devem responder “o que precisa da minha atenção?” antes de tentar medir performance.
+- “Novas em 7 dias” usa a data de criação; “Follow-ups em 7 dias” considera apenas pendentes.
+- “Etapas avançadas” soma entrevistas e propostas.
+- “Sem próximo passo” identifica candidaturas ativas sem follow-up e sem anotação de ação.
+- A lista de atenção prioriza follow-up atrasado, ausência de próximo passo e, por último, itens sem atualização há mais de 7 dias.
+- Cada item de atenção deve permitir abrir diretamente a candidatura para revisão.
+
+### Atividade da candidatura
+
+- O resumo de atividade usa apenas eventos suportados pelos dados existentes: criação, entrada no funil, follow-up, última atualização e etapa atual.
+- Não apresentar o resumo como histórico completo quando eventos intermediários não são persistidos.
+- A etapa atual aparece por último e sem timestamp artificial visível.
+
 ### Follow-ups
 
 - Atrasados usam fundo/vermelho suave.
@@ -172,7 +187,8 @@ O script `scripts/capture-site.mjs` gera:
 - dialog de candidatura mobile;
 - estado desktop em inglês;
 - dashboard populado em desktop;
-- dashboard populado em mobile.
+- dashboard populado em mobile;
+- diálogo de atividade da candidatura.
 
 O gate falha em:
 
