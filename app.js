@@ -46,6 +46,7 @@ const GATE_TEXT = {
     pageTitle:'VagaCerta — Organizador de candidaturas',
     pageDescription:'Organize candidaturas, acompanhe etapas, compatibilidade e próximos passos da sua busca por emprego.',
     skipLink:'Pular para o conteúdo', heroEyebrow:'ORGANIZADOR DE CANDIDATURAS',
+    heroTitleLead:'Menos vagas perdidas.', heroTitleAccent:'Mais próximos passos claros.',
     heroCopy:'Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.',
     inProgress:'Em andamento', activeApplications:'candidaturas ativas',
     boardEyebrow:'FUNIL DE CANDIDATURAS', applicationEyebrow:'CANDIDATURA', accountEyebrow:'SUA CONTA',
@@ -100,12 +101,20 @@ const GATE_TEXT = {
     passwordMin:'Use uma senha com pelo menos 8 caracteres.', authGeneric:'Não foi possível concluir. Confira os dados e tente novamente.',
     requiredCompany:'Informe a empresa.', requiredRole:'Informe o cargo.', invalidUrl:'Informe um link válido, começando com http:// ou https://.',
     invalidEmail:'Informe um e-mail válido.', offlineBanner:'Você está offline. O modo local continua disponível.',
-    cloudLoadFailed:'Não foi possível atualizar a nuvem. Seus dados locais continuam disponíveis.'
+    cloudLoadFailed:'Não foi possível atualizar a nuvem. Seus dados locais continuam disponíveis.',
+    syncing:'Sincronizando…', connected:'conectado',
+    importingLocal:'Importando candidaturas deste dispositivo…', importComplete:'Importação concluída.',
+    importFailed:'Não foi possível importar tudo. Os registros locais foram preservados.',
+    resumeLoadFailed:'Não foi possível carregar as versões de currículo.',
+    followCompletedToast:'Follow-up concluído.', followPostponedToast:'Follow-up adiado.', followUpdateFailed:'Não foi possível atualizar o follow-up.',
+    savingVersion:'Salvando nova versão…', versionSaved:'Nova versão salva.', versionSaveFailed:'Não foi possível salvar esta versão.',
+    sessionCheckFailed:'Não foi possível verificar sua sessão. O modo local continua disponível.'
   },
   en: {
     pageTitle:'VagaCerta — Job application tracker',
     pageDescription:'Organize applications, track stages, match and next steps in your job search.',
     skipLink:'Skip to content', heroEyebrow:'APPLICATION TRACKER',
+    heroTitleLead:'Miss fewer opportunities.', heroTitleAccent:'Make every next step clear.',
     heroCopy:'Save opportunities, track every stage and quickly see which applications need your attention.',
     inProgress:'In progress', activeApplications:'active applications',
     boardEyebrow:'APPLICATION FUNNEL', applicationEyebrow:'APPLICATION', accountEyebrow:'YOUR ACCOUNT',
@@ -160,7 +169,14 @@ const GATE_TEXT = {
     passwordMin:'Use a password with at least 8 characters.', authGeneric:'Could not complete the action. Check your details and try again.',
     requiredCompany:'Enter the company.', requiredRole:'Enter the role.', invalidUrl:'Enter a valid link starting with http:// or https://.',
     invalidEmail:'Enter a valid email.', offlineBanner:'You are offline. Local mode is still available.',
-    cloudLoadFailed:'Cloud refresh failed. Your local data is still available.'
+    cloudLoadFailed:'Cloud refresh failed. Your local data is still available.',
+    syncing:'Syncing…', connected:'connected',
+    importingLocal:'Importing applications from this device…', importComplete:'Import complete.',
+    importFailed:'Could not import everything. Local records were preserved.',
+    resumeLoadFailed:'Could not load resume versions.',
+    followCompletedToast:'Follow-up completed.', followPostponedToast:'Follow-up postponed.', followUpdateFailed:'Could not update follow-up.',
+    savingVersion:'Saving new version…', versionSaved:'New version saved.', versionSaveFailed:'Could not save this version.',
+    sessionCheckFailed:'Could not verify your session. Local mode remains available.'
   }
 };
 
@@ -205,13 +221,11 @@ function applyLanguage() {
     if (copy) copy.textContent = tr('adCopy');
   }
 
-  document.querySelector('.hero h1').innerHTML = currentLang === 'en'
-    ? 'Miss fewer opportunities.<br><span>Make every next step clear.</span>'
-    : 'Menos vagas perdidas.<br><span>Mais próximos passos claros.</span>';
+  document.querySelector('.hero h1').innerHTML = escapeHtml(gateTr('heroTitleLead')) + '<br><span>' + escapeHtml(gateTr('heroTitleAccent')) + '</span>';
 
   accountOpen.textContent = currentUser ? tr('account') : tr('login');
   syncStatus.textContent = currentUser
-    ? (loading ? (currentLang === 'en' ? 'Syncing…' : 'Sincronizando…') : tr('cloud') + ' · ' + (currentUser.email || (currentLang === 'en' ? 'connected' : 'conectado')))
+    ? (loading ? gateTr('syncing') : tr('cloud') + ' · ' + (currentUser.email || gateTr('connected')))
     : (supabaseClient ? tr('local') : tr('localOffline'));
   renderBoard();
 }
@@ -942,7 +956,7 @@ function updateAccountUi() {
   accountOpen.disabled = !supabaseClient;
   accountOpen.textContent = currentUser ? tr('account') : tr('login');
   syncStatus.textContent = currentUser
-    ? (loading ? (currentLang === 'en' ? 'Syncing…' : 'Sincronizando…') : tr('cloud') + ' · ' + (currentUser.email || (currentLang === 'en' ? 'connected' : 'conectado')))
+    ? (loading ? gateTr('syncing') : tr('cloud') + ' · ' + (currentUser.email || gateTr('connected')))
     : (supabaseClient ? tr('local') : tr('localOffline'));
 
   accountForm.hidden = Boolean(currentUser) || !supabaseClient;
@@ -963,7 +977,7 @@ async function importLocal() {
   }
 
   importLocalButton.disabled = true;
-  accountMessage.textContent = 'Importando candidaturas deste dispositivo…';
+  accountMessage.textContent = gateTr('importingLocal');
 
   try {
     for (const raw of local) {
@@ -976,11 +990,11 @@ async function importLocal() {
     }
     localStorage.removeItem(STORAGE_KEY);
     await loadCloud();
-    accountMessage.textContent = 'Importação concluída.';
+    accountMessage.textContent = gateTr('importComplete');
     importLocalButton.hidden = true;
   } catch (error) {
     console.error(error);
-    accountMessage.textContent = 'Não foi possível importar tudo. Os registros locais foram preservados.';
+    accountMessage.textContent = gateTr('importFailed');
   } finally {
     importLocalButton.disabled = false;
   }
@@ -1009,7 +1023,7 @@ async function renderDocuments() {
   } catch (error) {
     console.error(error);
     documentList.innerHTML = '';
-    documentsMessage.textContent = currentLang === 'en' ? 'Could not load resume versions.' : 'Não foi possível carregar as versões de currículo.';
+    documentsMessage.textContent = gateTr('resumeLoadFailed');
   }
 }
 
@@ -1137,10 +1151,10 @@ followUpList?.addEventListener('click', async event => {
   item.updatedAt = Date.now();
   try {
     await persistItem(item);
-    showToast(done ? (currentLang === 'en' ? 'Follow-up completed.' : 'Follow-up concluído.') : (currentLang === 'en' ? 'Follow-up postponed.' : 'Follow-up adiado.'));
+    showToast(done ? gateTr('followCompletedToast') : gateTr('followPostponedToast'));
   } catch (error) {
     console.error(error);
-    showToast(currentLang === 'en' ? 'Could not update follow-up.' : 'Não foi possível atualizar o follow-up.');
+    showToast(gateTr('followUpdateFailed'));
   }
 });
 
@@ -1178,15 +1192,15 @@ documentForm.addEventListener('submit', async event => {
   if (!activeDocumentApplicationId || !documentForm.reportValidity()) return;
   const submit = documentForm.querySelector('[type="submit"]');
   submit.disabled = true;
-  documentsMessage.textContent = currentLang === 'en' ? 'Saving new version…' : 'Salvando nova versão…';
+  documentsMessage.textContent = gateTr('savingVersion');
   try {
     await saveDocumentVersion(documentForm.elements.title.value, documentForm.elements.content.value);
     documentForm.reset();
-    documentsMessage.textContent = currentLang === 'en' ? 'New version saved.' : 'Nova versão salva.';
+    documentsMessage.textContent = gateTr('versionSaved');
     await renderDocuments();
   } catch (error) {
     console.error(error);
-    documentsMessage.textContent = currentLang === 'en' ? 'Could not save this version.' : 'Não foi possível salvar esta versão.';
+    documentsMessage.textContent = gateTr('versionSaveFailed');
   } finally {
     submit.disabled = false;
   }
@@ -1293,7 +1307,7 @@ function initAuth() {
 
   supabaseClient.auth.getSession().then(({ data, error }) => {
     if (error) {
-      accountMessage.textContent = 'Não foi possível verificar sua sessão. O modo local continua disponível.';
+      accountMessage.textContent = gateTr('sessionCheckFailed');
       renderBoard();
       return;
     }
