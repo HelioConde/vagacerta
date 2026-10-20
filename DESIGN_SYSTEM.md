@@ -115,6 +115,22 @@ Evitar valores arbitrários quando um valor da escala resolver o mesmo problema.
 - Campos devem ter label persistente; placeholder nunca substitui label.
 - Mensagens de erro/status devem usar `aria-live`.
 
+### Conectividade e resiliência
+
+- Offline nunca bloqueia o modo local.
+- A perda de conexão é comunicada em banner persistente e discreto.
+- Sincronizações em andamento usam `aria-busy` e feedback visual sem esconder o conteúdo existente.
+- Falhas de nuvem devem explicar que os dados locais continuam disponíveis.
+- Ao recuperar a conexão, o aviso offline desaparece sem exigir recarregar a página.
+
+### Validação de formulários
+
+- Erros são exibidos junto ao campo e não apenas em toast/modal.
+- Campos inválidos usam `aria-invalid="true"`.
+- Ao enviar um formulário inválido, o foco vai para o primeiro campo com erro.
+- A mensagem deve explicar como corrigir o valor; não usar apenas “inválido”.
+- Estados de erro não dependem apenas de cor.
+
 ### Publicidade
 
 - Sempre visualmente secundária.
