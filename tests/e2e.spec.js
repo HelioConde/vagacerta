@@ -86,3 +86,52 @@ test("language switch translates the complete application and account flows", as
   await expect(page.getByRole("button", { name: "Create account" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Forgot password" })).toBeVisible();
 });
+
+
+test("keyboard navigation and mobile layout remain accessible", async ({ page }) => {
+  await page.keyboard.press("Tab");
+  await expect(page.locator(".skip-link")).toBeFocused();
+  await expect(page.locator(".skip-link")).toHaveText(/Pular para o conteúdo/);
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#main-content")).toBeInViewport();
+
+  await page.getByRole("button", { name: "+ Nova candidatura" }).focus();
+  const focusStyle = await page.getByRole("button", { name: "+ Nova candidatura" }).evaluate(element => {
+    const style = getComputedStyle(element);
+    return { outlineWidth: style.outlineWidth, boxShadow: style.boxShadow };
+  });
+  expect(focusStyle.outlineWidth !== "0px" || focusStyle.boxShadow !== "none").toBeTruthy();
+
+  await page.getByRole("button", { name: "+ Nova candidatura" }).click();
+  await expect(page.locator("#application-dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#application-dialog")).not.toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("body")).toBeVisible();
+
+  const layout = await page.evaluate(() => ({
+    bodyWidth: document.body.scrollWidth,
+    viewportWidth: document.documentElement.clientWidth,
+    tinyText: [...document.querySelectorAll("body *")]
+      .filter(element => {
+        const rect = element.getBoundingClientRect();
+        if (!rect.width || !rect.height || !String(element.textContent || "").trim() || element.children.length) return false;
+        return Number.parseFloat(getComputedStyle(element).fontSize) < 11;
+      }).length,
+    smallTargets: [...document.querySelectorAll("button,a,input,select,textarea")]
+      .filter(element => {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+      })
+      .filter(element => {
+        const rect = element.getBoundingClientRect();
+        return rect.width < 36 || rect.height < 36;
+      }).length
+  }));
+
+  expect(layout.bodyWidth).toBeLessThanOrEqual(layout.viewportWidth);
+  expect(layout.tinyText).toBe(0);
+  expect(layout.smallTargets).toBe(0);
+});
