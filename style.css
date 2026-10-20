@@ -800,3 +800,82 @@ a{color:inherit;text-decoration:none}
 @media(max-width:390px){
   .toolbar-actions{grid-template-columns:1fr}
 }
+
+
+/* Product hardening — connectivity, validation and loading states */
+.connection-banner{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:12px 0 0;
+  padding:10px 12px;
+  border:1px solid #ead6a7;
+  border-radius:11px;
+  background:#fff9ea;
+  color:#6f5415;
+  font-size:12px;
+  font-weight:700;
+}
+.connection-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#c38b17;
+  box-shadow:0 0 0 4px rgba(195,139,23,.12);
+}
+body.is-syncing #board,
+body.is-syncing #follow-up-list{
+  opacity:.62;
+  pointer-events:none;
+}
+body.is-syncing .sync-status::before{
+  background:var(--warning);
+  animation:syncPulse 1s ease-in-out infinite alternate;
+}
+@keyframes syncPulse{
+  from{transform:scale(.9);opacity:.65}
+  to{transform:scale(1.15);opacity:1}
+}
+.field-error{
+  display:none;
+  margin-top:6px;
+  color:var(--danger);
+  font-size:11px;
+  line-height:1.4;
+  font-weight:700;
+}
+.field.has-error .field-error{display:block}
+.field.has-error input,
+.field.has-error select,
+.field.has-error textarea{
+  border-color:#d59d99;
+  background:#fffafa;
+}
+.field.has-error input:focus-visible,
+.field.has-error select:focus-visible,
+.field.has-error textarea:focus-visible{
+  border-color:var(--danger);
+  box-shadow:0 0 0 3px rgba(157,63,63,.13);
+}
+.button[aria-busy="true"]{
+  position:relative;
+  cursor:progress;
+}
+.button[aria-busy="true"]::after{
+  content:'';
+  display:inline-block;
+  width:12px;
+  height:12px;
+  margin-left:8px;
+  border:2px solid currentColor;
+  border-right-color:transparent;
+  border-radius:50%;
+  vertical-align:-2px;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(prefers-reduced-motion:reduce){
+  body.is-syncing .sync-status::before,
+  .button[aria-busy="true"]::after{animation:none}
+}
