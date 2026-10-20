@@ -41,7 +41,7 @@ Dados privados são protegidos por RLS.
 
 ## Diferenciais do gate
 
-Os quatro diferenciais foram implementados em 07/10/2026. A migration necessária está versionada em `supabase/migrations/20261007_vagacerta_product_gate.sql` e ainda precisa ser aplicada no Supabase compartilhado antes de considerar a sincronização em nuvem concluída.
+Os quatro diferenciais foram implementados em 07/10/2026. As migrations do gate, proteção de vínculo documento/candidatura e hardening de grants/RLS já estão aplicadas no Supabase compartilhado e versionadas em `supabase/migrations/`.
 
 Somente depois de validar este bloco:
 - importação de vaga por URL quando houver integração permitida;
@@ -64,12 +64,22 @@ Isolamento RLS, duplicidade, URLs inválidas, troca de status, score 0–100, mo
 ## Gate para sair da implementação pesada
 
 - [x] os quatro diferenciais acima implementados no modo local;
-- [ ] persistência/sincronização funcionam com conta autenticada após aplicar migration;
+- [x] schema, grants e políticas necessários para persistência/sincronização autenticada estão aplicados;
 - [ ] RLS de documentos e candidaturas validada entre dois usuários;
-- [x] PT-BR/EN cobrem os novos fluxos;
+- [x] PT-BR/EN cobrem painel, formulário, autenticação e novos fluxos;
 - [ ] mobile e teclado utilizáveis no ambiente publicado;
 - [x] Browser E2E cobre criação → candidatura → follow-up → currículo → entrevista;
-- [ ] GitHub Pages/CI verdes;
+- [ ] GitHub Pages publicado; CI de código está verde, mas o deploy exige habilitar uma vez `Settings > Pages > Source: GitHub Actions`;
 - [ ] nenhum P0/P1 conhecido.
 
 Até cumprir esse gate, VagaCerta é **produto em desenvolvimento**, não MVP finalizado.
+
+
+## Hardening de segurança — 20/10/2026
+
+- `vagacerta_applications` e `vagacerta_documents` não concedem acesso ao papel `anon`;
+- `authenticated` recebe somente `SELECT, INSERT, UPDATE, DELETE`;
+- documentos usam uma policy permissiva de propriedade mais uma policy restritiva que exige candidatura do mesmo usuário;
+- policies permissivas duplicadas de documentos foram removidas;
+- Supabase Advisor não aponta mais `multiple_permissive_policies` para tabelas do VagaCerta;
+- migration registrada no banco: `20261020030519_vagacerta_harden_rls_and_grants`.
