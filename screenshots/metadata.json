@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T03:27:22.256Z",
+  "generatedAt": "2026-10-20T03:32:30.186Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -134,7 +134,7 @@
         "width": 1440,
         "height": 1000
       },
-      "title": "VagaCerta — Organizador de candidaturas",
+      "title": "VagaCerta — Job application tracker",
       "width": 1440,
       "height": 1871,
       "viewportWidth": 1440,
