@@ -84,7 +84,10 @@ const GATE_TEXT = {
     emailPasswordRequired:'Informe um e-mail e uma senha com pelo menos 8 caracteres.', emailRequired:'Informe seu e-mail primeiro.',
     resetSent:'Se o e-mail estiver cadastrado, enviaremos um link de recuperação.', signOutFailed:'Não foi possível sair.', signedOut:'Você saiu da conta.',
     invalidCredentials:'E-mail ou senha incorretos.', emailNotConfirmed:'Confirme seu e-mail antes de entrar.', alreadyRegistered:'Este e-mail já possui conta.',
-    passwordMin:'Use uma senha com pelo menos 8 caracteres.', authGeneric:'Não foi possível concluir. Confira os dados e tente novamente.'
+    passwordMin:'Use uma senha com pelo menos 8 caracteres.', authGeneric:'Não foi possível concluir. Confira os dados e tente novamente.',
+    requiredCompany:'Informe a empresa.', requiredRole:'Informe o cargo.', invalidUrl:'Informe um link válido, começando com http:// ou https://.',
+    invalidEmail:'Informe um e-mail válido.', offlineBanner:'Você está offline. O modo local continua disponível.',
+    cloudLoadFailed:'Não foi possível atualizar a nuvem. Seus dados locais continuam disponíveis.'
   },
   en: {
     followUpEyebrow:'NEXT FOLLOW-UPS', followUpTitle:'Follow-ups that need attention',
@@ -128,7 +131,10 @@ const GATE_TEXT = {
     emailPasswordRequired:'Enter an email and a password with at least 8 characters.', emailRequired:'Enter your email first.',
     resetSent:'If the email is registered, we will send a recovery link.', signOutFailed:'Could not sign out.', signedOut:'You signed out.',
     invalidCredentials:'Incorrect email or password.', emailNotConfirmed:'Confirm your email before signing in.', alreadyRegistered:'This email already has an account.',
-    passwordMin:'Use a password with at least 8 characters.', authGeneric:'Could not complete the action. Check your details and try again.'
+    passwordMin:'Use a password with at least 8 characters.', authGeneric:'Could not complete the action. Check your details and try again.',
+    requiredCompany:'Enter the company.', requiredRole:'Enter the role.', invalidUrl:'Enter a valid link starting with http:// or https://.',
+    invalidEmail:'Enter a valid email.', offlineBanner:'You are offline. Local mode is still available.',
+    cloudLoadFailed:'Cloud refresh failed. Your local data is still available.'
   }
 };
 
@@ -254,6 +260,69 @@ const documentsDialog = document.querySelector('#documents-dialog');
 const documentForm = document.querySelector('#document-form');
 const documentList = document.querySelector('#document-list');
 const documentsMessage = document.querySelector('#documents-message');
+const connectionBanner = document.querySelector('#connection-banner');
+const connectionBannerText = document.querySelector('#connection-banner-text');
+
+
+function setFieldError(form, name, message, attribute = 'data-field-error') {
+  const input = form.elements[name];
+  if (!input) return;
+  const field = input.closest('.field');
+  const error = field?.querySelector('[' + attribute + '="' + name + '"]');
+  const active = Boolean(message);
+  field?.classList.toggle('has-error', active);
+  input.setAttribute('aria-invalid', String(active));
+  if (error) error.textContent = message || '';
+}
+
+function validateApplicationFields() {
+  const company = applicationForm.elements.company.value.trim();
+  const role = applicationForm.elements.role.value.trim();
+  const url = applicationForm.elements.url.value.trim();
+
+  setFieldError(applicationForm, 'company', company ? '' : gateTr('requiredCompany'));
+  setFieldError(applicationForm, 'role', role ? '' : gateTr('requiredRole'));
+
+  let urlMessage = '';
+  if (url) {
+    try {
+      const parsed = new URL(url);
+      if (!['http:', 'https:'].includes(parsed.protocol)) urlMessage = gateTr('invalidUrl');
+    } catch {
+      urlMessage = gateTr('invalidUrl');
+    }
+  }
+  setFieldError(applicationForm, 'url', urlMessage);
+
+  const invalid = applicationForm.querySelector('[aria-invalid="true"]');
+  if (invalid) invalid.focus();
+  return !invalid;
+}
+
+function validateAuthFields() {
+  const email = accountForm.elements.email.value.trim();
+  const password = accountForm.elements.password.value;
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  setFieldError(accountForm, 'email', emailValid ? '' : gateTr('invalidEmail'), 'data-auth-error');
+  setFieldError(accountForm, 'password', password.length >= 8 ? '' : gateTr('passwordMin'), 'data-auth-error');
+  const invalid = accountForm.querySelector('[aria-invalid="true"]');
+  if (invalid) invalid.focus();
+  return !invalid;
+}
+
+function setBusy(button, busy) {
+  if (!button) return;
+  button.disabled = busy;
+  button.setAttribute('aria-busy', String(busy));
+}
+
+function updateConnectivity() {
+  if (!connectionBanner || !connectionBannerText) return;
+  const offline = !navigator.onLine;
+  connectionBanner.hidden = !offline;
+  connectionBannerText.textContent = gateTr('offlineBanner');
+  document.body.classList.toggle('is-offline', offline);
+}
 
 let activeDocumentApplicationId = null;
 let currentUser = null;
@@ -733,6 +802,8 @@ async function saveCloud(item) {
 async function loadCloud() {
   if (!currentUser || !supabaseClient) return;
   loading = true;
+  document.body.classList.add('is-syncing');
+  board.setAttribute('aria-busy', 'true');
   updateAccountUi();
 
   const ownerId = currentUser.id;
@@ -743,10 +814,12 @@ async function loadCloud() {
     .limit(150);
 
   loading = false;
+  document.body.classList.remove('is-syncing');
+  board.setAttribute('aria-busy', 'false');
   if (currentUser?.id !== ownerId) return;
 
   if (error) {
-    accountMessage.textContent = 'Não foi possível carregar suas candidaturas.';
+    accountMessage.textContent = gateTr('cloudLoadFailed');
     updateAccountUi();
     return;
   }
@@ -897,13 +970,13 @@ applicationDialog.addEventListener('click', event => {
 
 applicationForm.addEventListener('submit', async event => {
   event.preventDefault();
-  if (!applicationForm.reportValidity()) return;
+  if (!validateApplicationFields()) return;
 
   const id = applicationForm.elements.id.value;
   const existing = id ? visibleItems().map(normalizeLocal).find(item => item.id === id) : null;
   const item = formToItem(existing || null);
   const submit = applicationForm.querySelector('[type="submit"]');
-  submit.disabled = true;
+  setBusy(submit, true);
   formMessage.textContent = currentUser ? gateTr('savingCloud') : gateTr('savingLocal');
 
   try {
@@ -914,7 +987,7 @@ applicationForm.addEventListener('submit', async event => {
     console.error(error);
     formMessage.textContent = gateTr('saveFailed');
   } finally {
-    submit.disabled = false;
+    setBusy(submit, false);
   }
 });
 
@@ -990,6 +1063,12 @@ followUpList?.addEventListener('click', async event => {
 applicationForm.elements.requirements.addEventListener('input', event => {
   renderMatchBreakdown(parseRequirementsText(event.target.value));
 });
+['company','role','url'].forEach(name => {
+  applicationForm.elements[name]?.addEventListener('input', () => setFieldError(applicationForm, name, '', 'data-field-error'));
+});
+['email','password'].forEach(name => {
+  accountForm.elements[name]?.addEventListener('input', () => setFieldError(accountForm, name, '', 'data-auth-error'));
+});
 
 searchInput.addEventListener('input', renderBoard);
 statusFilter.addEventListener('change', renderBoard);
@@ -1037,9 +1116,9 @@ accountDialog.addEventListener('click', event => {
 
 accountForm.addEventListener('submit', async event => {
   event.preventDefault();
-  if (!supabaseClient) return;
+  if (!supabaseClient || !validateAuthFields()) return;
   const submit = accountForm.querySelector('[type="submit"]');
-  submit.disabled = true;
+  setBusy(submit, true);
   accountMessage.textContent = gateTr('signingIn');
   try {
     const { error } = await supabaseClient.auth.signInWithPassword({
@@ -1051,7 +1130,7 @@ accountForm.addEventListener('submit', async event => {
   } catch (error) {
     accountMessage.textContent = authErrorText(error);
   } finally {
-    submit.disabled = false;
+    setBusy(submit, false);
   }
 });
 
@@ -1059,12 +1138,12 @@ document.querySelector('#sign-up').addEventListener('click', async () => {
   if (!supabaseClient) return;
   const email = accountForm.elements.email.value.trim();
   const password = accountForm.elements.password.value;
-  if (!email || password.length < 8) {
+  if (!validateAuthFields()) {
     accountMessage.textContent = gateTr('emailPasswordRequired');
     return;
   }
   const button = document.querySelector('#sign-up');
-  button.disabled = true;
+  setBusy(button, true);
   accountMessage.textContent = gateTr('creatingAccount');
   try {
     const { data, error } = await supabaseClient.auth.signUp({ email, password });
@@ -1075,7 +1154,7 @@ document.querySelector('#sign-up').addEventListener('click', async () => {
   } catch (error) {
     accountMessage.textContent = authErrorText(error);
   } finally {
-    button.disabled = false;
+    setBusy(button, false);
   }
 });
 
@@ -1138,9 +1217,13 @@ function initAuth() {
   });
 }
 
+window.addEventListener('online', updateConnectivity);
+window.addEventListener('offline', updateConnectivity);
+
 migrateLegacyLocal();
 renderBoard();
 updateAccountUi();
+updateConnectivity();
 initAuth();
 
 
@@ -1149,6 +1232,8 @@ document.querySelectorAll('[data-lang]').forEach(button => {
     currentLang = button.dataset.lang === 'en' ? 'en' : 'pt-BR';
     localStorage.setItem('vagacerta-lang', currentLang);
     applyLanguage();
+    updateConnectivity();
   });
 });
 applyLanguage();
+updateConnectivity();
