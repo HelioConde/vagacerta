@@ -40,28 +40,28 @@
 
       <section class="toolbar" aria-label="Filtros de candidaturas">
         <div class="search-wrap">
-          <label for="search">Buscar</label>
-          <input id="search" type="search" placeholder="Empresa, cargo ou anotação">
+          <label for="search" data-vc-i18n="searchLabel">Buscar</label>
+          <input id="search" type="search" data-vc-placeholder="searchPlaceholder" placeholder="Empresa, cargo ou anotação">
         </div>
         <div class="filter-wrap">
-          <label for="status-filter">Status</label>
+          <label for="status-filter" data-vc-i18n="statusLabel">Status</label>
           <select id="status-filter">
-            <option value="">Todos</option>
-            <option value="saved">Salvas</option>
-            <option value="applied">Candidatadas</option>
-            <option value="interview">Entrevistas</option>
-            <option value="offer">Propostas</option>
-            <option value="rejected">Encerradas</option>
+            <option value="" data-vc-i18n="allStatuses">Todos</option>
+            <option value="saved" data-vc-i18n="statusSavedPlural">Salvas</option>
+            <option value="applied" data-vc-i18n="statusAppliedPlural">Candidatadas</option>
+            <option value="interview" data-vc-i18n="statusInterviewPlural">Entrevistas</option>
+            <option value="offer" data-vc-i18n="statusOfferPlural">Propostas</option>
+            <option value="rejected" data-vc-i18n="statusRejectedPlural">Encerradas</option>
           </select>
         </div>
-        <button id="new-application" class="button primary" type="button">+ Nova candidatura</button>
+        <button id="new-application" class="button primary" type="button" data-vc-i18n="newApplication">+ Nova candidatura</button>
       </section>
 
       <section class="metrics" aria-label="Resumo">
-        <article><span>Total</span><strong id="metric-total">0</strong></article>
-        <article><span>Candidatadas</span><strong id="metric-applied">0</strong></article>
-        <article><span>Entrevistas</span><strong id="metric-interviews">0</strong></article>
-        <article><span>Compatibilidade média</span><strong id="metric-score">—</strong></article>
+        <article><span data-vc-i18n="metricTotal">Total</span><strong id="metric-total">0</strong></article>
+        <article><span data-vc-i18n="metricApplied">Candidatadas</span><strong id="metric-applied">0</strong></article>
+        <article><span data-vc-i18n="metricInterviews">Entrevistas</span><strong id="metric-interviews">0</strong></article>
+        <article><span data-vc-i18n="metricMatch">Compatibilidade média</span><strong id="metric-score">—</strong></article>
       </section>
 
       <aside class="ad-slot" aria-label="Publicidade" data-ad-slot="dashboard"><span>Publicidade</span><small>Espaço preparado para anúncios não intrusivos.</small></aside>
@@ -81,9 +81,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">FUNIL DE CANDIDATURAS</p>
-            <h2>Onde cada vaga está agora</h2>
+            <h2 data-vc-i18n="boardTitle">Onde cada vaga está agora</h2>
           </div>
-          <p>Altere o status diretamente em cada card.</p>
+          <p data-vc-i18n="boardHelp">Altere o status diretamente em cada card.</p>
         </div>
         <div id="board" class="board" aria-live="polite"></div>
       </section>
@@ -91,7 +91,7 @@
 
     <footer class="footer">
       <span>VagaCerta</span>
-      <small>Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.</small>
+      <small data-vc-i18n="footerPrivacy">Sem conta, os dados ficam neste dispositivo. Ao entrar, ficam privados na sua conta.</small>
     </footer>
   </div>
 
@@ -99,29 +99,29 @@
     <div class="dialog-head">
       <div>
         <p class="eyebrow">CANDIDATURA</p>
-        <h2 id="application-title">Adicionar oportunidade</h2>
+        <h2 id="application-title" data-vc-i18n="addOpportunity">Adicionar oportunidade</h2>
       </div>
       <button class="icon-button" id="application-close" type="button" aria-label="Fechar">×</button>
     </div>
     <form id="application-form">
       <input name="id" type="hidden">
       <div class="form-grid">
-        <label class="field"><span>Empresa</span><input name="company" maxlength="120" required placeholder="Ex.: Empresa Aurora"></label>
-        <label class="field"><span>Cargo</span><input name="role" maxlength="160" required placeholder="Ex.: Front-End Júnior"></label>
+        <label class="field"><span data-vc-i18n="company">Empresa</span><input name="company" maxlength="120" required data-vc-placeholder="companyPlaceholder" placeholder="Ex.: Empresa Aurora"></label>
+        <label class="field"><span data-vc-i18n="role">Cargo</span><input name="role" maxlength="160" required data-vc-placeholder="rolePlaceholder" placeholder="Ex.: Front-End Júnior"></label>
       </div>
-      <label class="field"><span>Link da vaga</span><input name="url" type="url" maxlength="1200" placeholder="https://..."></label>
+      <label class="field"><span data-vc-i18n="jobLink">Link da vaga</span><input name="url" type="url" maxlength="1200" placeholder="https://..."></label>
       <div class="form-grid three">
-        <label class="field"><span>Status</span>
+        <label class="field"><span data-vc-i18n="statusLabel">Status</span>
           <select name="status">
-            <option value="saved">Salva</option>
-            <option value="applied">Candidatada</option>
-            <option value="interview">Entrevista</option>
-            <option value="offer">Proposta</option>
-            <option value="rejected">Encerrada</option>
+            <option value="saved" data-vc-i18n="statusSaved">Salva</option>
+            <option value="applied" data-vc-i18n="statusApplied">Candidatada</option>
+            <option value="interview" data-vc-i18n="statusInterview">Entrevista</option>
+            <option value="offer" data-vc-i18n="statusOffer">Proposta</option>
+            <option value="rejected" data-vc-i18n="statusRejected">Encerrada</option>
           </select>
         </label>
         <label class="field"><span data-vc-i18n="calculatedMatch">Compatibilidade calculada</span><input name="matchScore" type="number" min="0" max="100" step="1" readonly placeholder="—"></label>
-        <label class="field"><span>Pretensão / salário</span><input name="salary" maxlength="80" placeholder="Ex.: R$ 2.500 ou a combinar"></label>
+        <label class="field"><span data-vc-i18n="salary">Pretensão / salário</span><input name="salary" maxlength="80" data-vc-placeholder="salaryPlaceholder" placeholder="Ex.: R$ 2.500 ou a combinar"></label>
       </div>
 
       <label class="field"><span data-vc-i18n="requirementsTitle">Compatibilidade explicada por requisito</span>
@@ -148,12 +148,12 @@
         <label class="field"><span data-vc-i18n="interviewNotes">Notas da entrevista</span><textarea name="interviewNotes" maxlength="3000"></textarea></label>
       </fieldset>
 
-      <label class="field"><span>Próxima ação / anotações</span><textarea name="notes" maxlength="1500" placeholder="Ex.: revisar portfólio e fazer follow-up em 5 dias"></textarea></label>
+      <label class="field"><span data-vc-i18n="notes">Próxima ação / anotações</span><textarea name="notes" maxlength="1500" data-vc-placeholder="notesPlaceholder" placeholder="Ex.: revisar portfólio e fazer follow-up em 5 dias"></textarea></label>
       <div class="dialog-actions">
-        <button id="delete-application" class="button danger" type="button" hidden>Excluir</button>
+        <button id="delete-application" class="button danger" type="button" hidden data-vc-i18n="delete">Excluir</button>
         <span class="spacer"></span>
-        <button id="cancel-application" class="button ghost" type="button">Cancelar</button>
-        <button class="button primary" type="submit">Salvar candidatura</button>
+        <button id="cancel-application" class="button ghost" type="button" data-vc-i18n="cancel">Cancelar</button>
+        <button class="button primary" type="submit" data-vc-i18n="saveApplication">Salvar candidatura</button>
       </div>
       <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
     </form>
@@ -163,24 +163,24 @@
     <div class="dialog-head">
       <div>
         <p class="eyebrow">SUA CONTA</p>
-        <h2 id="account-title">Sincronize sua busca</h2>
+        <h2 id="account-title" data-vc-i18n="syncSearch">Sincronize sua busca</h2>
       </div>
       <button class="icon-button" id="account-close" type="button" aria-label="Fechar">×</button>
     </div>
-    <p class="dialog-copy">Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.</p>
+    <p class="dialog-copy" data-vc-i18n="accountHelp">Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.</p>
     <form id="auth-form">
-      <label class="field"><span>E-mail</span><input name="email" type="email" autocomplete="email" required></label>
-      <label class="field"><span>Senha</span><input name="password" type="password" minlength="8" autocomplete="current-password" required></label>
-      <button class="button primary full" type="submit">Entrar</button>
+      <label class="field"><span data-vc-i18n="email">E-mail</span><input name="email" type="email" autocomplete="email" required></label>
+      <label class="field"><span data-vc-i18n="password">Senha</span><input name="password" type="password" minlength="8" autocomplete="current-password" required></label>
+      <button class="button primary full" type="submit" data-vc-i18n="signIn">Entrar</button>
       <div class="account-actions">
-        <button id="sign-up" class="button ghost" type="button">Criar conta</button>
-        <button id="reset-password" class="button text" type="button">Esqueci a senha</button>
+        <button id="sign-up" class="button ghost" type="button" data-vc-i18n="signUp">Criar conta</button>
+        <button id="reset-password" class="button text" type="button" data-vc-i18n="forgotPassword">Esqueci a senha</button>
       </div>
     </form>
     <div id="account-profile" hidden>
-      <p>Conectado como <strong id="account-email"></strong></p>
-      <button id="import-local" class="button ghost full" type="button" hidden>Importar candidaturas deste dispositivo</button>
-      <button id="sign-out" class="button ghost full" type="button">Sair da conta</button>
+      <p><span data-vc-i18n="connectedAs">Conectado como</span> <strong id="account-email"></strong></p>
+      <button id="import-local" class="button ghost full" type="button" hidden data-vc-i18n="importLocal">Importar candidaturas deste dispositivo</button>
+      <button id="sign-out" class="button ghost full" type="button" data-vc-i18n="signOut">Sair da conta</button>
     </div>
     <p id="account-message" class="form-message" role="status" aria-live="polite"></p>
   </dialog>
