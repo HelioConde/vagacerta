@@ -1,6 +1,6 @@
 # Visual audit
 
-Generated: 2026-10-20T03:12:15.670Z
+Generated: 2026-10-20T03:17:46.213Z
 
 ## desktop-full.png
 
@@ -16,7 +16,7 @@ Generated: 2026-10-20T03:12:15.670Z
 ## mobile-full.png
 
 - Viewport: 390×844
-- Page: 390×2083
+- Page: 390×2114
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
@@ -38,7 +38,7 @@ Generated: 2026-10-20T03:12:15.670Z
 ## mobile-application-dialog.png
 
 - Viewport: 390×844
-- Page: 390×2083
+- Page: 390×2114
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
