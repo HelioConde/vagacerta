@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
   <div class="shell">
     <header class="topbar">
       <a class="brand" href="./">VagaCerta<span>.</span></a>
@@ -24,7 +25,7 @@
       </nav>
     </header>
 
-    <main>
+    <main id="main-content">
       <section class="hero">
         <div>
           <p class="eyebrow">ORGANIZADOR DE CANDIDATURAS</p>
@@ -106,10 +107,10 @@
     <form id="application-form">
       <input name="id" type="hidden">
       <div class="form-grid">
-        <label class="field"><span data-vc-i18n="company">Empresa</span><input name="company" maxlength="120" required data-vc-placeholder="companyPlaceholder" placeholder="Ex.: Empresa Aurora"></label>
-        <label class="field"><span data-vc-i18n="role">Cargo</span><input name="role" maxlength="160" required data-vc-placeholder="rolePlaceholder" placeholder="Ex.: Front-End Júnior"></label>
+        <label class="field"><span data-vc-i18n="company">Empresa</span><input name="company" maxlength="120" autocomplete="organization" required data-vc-placeholder="companyPlaceholder" placeholder="Ex.: Empresa Aurora"></label>
+        <label class="field"><span data-vc-i18n="role">Cargo</span><input name="role" maxlength="160" autocomplete="organization-title" required data-vc-placeholder="rolePlaceholder" placeholder="Ex.: Front-End Júnior"></label>
       </div>
-      <label class="field"><span data-vc-i18n="jobLink">Link da vaga</span><input name="url" type="url" maxlength="1200" placeholder="https://..."></label>
+      <label class="field"><span data-vc-i18n="jobLink">Link da vaga</span><input name="url" type="url" inputmode="url" maxlength="1200" placeholder="https://..."></label>
       <div class="form-grid three">
         <label class="field"><span data-vc-i18n="statusLabel">Status</span>
           <select name="status">
@@ -125,8 +126,8 @@
       </div>
 
       <label class="field"><span data-vc-i18n="requirementsTitle">Compatibilidade explicada por requisito</span>
-        <textarea name="requirements" maxlength="4000" data-vc-placeholder="requirementsPlaceholder" placeholder="+ React&#10;+ HTML/CSS&#10;- TypeScript&#10;? Inglês avançado"></textarea>
-        <small class="field-hint" data-vc-i18n="requirementsHint">Uma linha por requisito: + atendido, - ausente, ? não comprovado. O score é calculado apenas com evidências confirmadas.</small>
+        <textarea name="requirements" maxlength="4000" aria-describedby="requirements-hint" data-vc-placeholder="requirementsPlaceholder" placeholder="+ React&#10;+ HTML/CSS&#10;- TypeScript&#10;? Inglês avançado"></textarea>
+        <small id="requirements-hint" class="field-hint" data-vc-i18n="requirementsHint">Uma linha por requisito: + atendido, - ausente, ? não comprovado. O score é calculado apenas com evidências confirmadas.</small>
       </label>
       <div id="match-breakdown" class="match-breakdown" aria-live="polite"></div>
 
