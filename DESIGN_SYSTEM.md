@@ -78,6 +78,13 @@ Evitar valores arbitrários quando um valor da escala resolver o mesmo problema.
 - Dois ou um por linha em telas menores.
 - Números têm prioridade sobre rótulos.
 
+### Estado vazio e onboarding
+
+- O primeiro acesso deve explicar o fluxo em no máximo três passos.
+- O CTA principal do estado vazio abre o mesmo formulário da ação “Nova candidatura”.
+- O onboarding desaparece assim que houver ao menos uma candidatura.
+- Evitar ilustrações decorativas se elas não ajudarem a entender a próxima ação.
+
 ### Follow-ups
 
 - Atrasados usam fundo/vermelho suave.
@@ -87,6 +94,9 @@ Evitar valores arbitrários quando um valor da escala resolver o mesmo problema.
 ### Board
 
 - Colunas usam diferença de cor apenas como pista sutil.
+- Em telas menores, uma navegação horizontal por etapas permite saltar diretamente para cada coluna.
+- O resumo do board informa quantas candidaturas estão sendo exibidas após busca/filtro.
+- Ao aplicar filtro, a ação “Limpar filtros” deve ficar disponível e devolver o foco à busca.
 - Horizontal scroll é permitido e intencional.
 - Cada coluna usa snap no mobile.
 - Cards devem manter a mesma estrutura: cargo → empresa → sinais → notas → ferramentas → status.
@@ -144,7 +154,9 @@ O script `scripts/capture-site.mjs` gera:
 - mobile completo;
 - dialog de candidatura desktop;
 - dialog de candidatura mobile;
-- estado desktop em inglês.
+- estado desktop em inglês;
+- dashboard populado em desktop;
+- dashboard populado em mobile.
 
 O gate falha em:
 
