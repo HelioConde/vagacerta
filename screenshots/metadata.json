@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T03:26:33.705Z",
+  "generatedAt": "2026-10-20T03:27:22.256Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -67,6 +67,24 @@
       "height": 3436,
       "viewportWidth": 390,
       "viewportHeight": 844,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "desktop-activity-dialog.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 1440,
+      "height": 2090,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000,
       "overflow": [],
       "smallTapTargets": [],
       "tinyText": [],

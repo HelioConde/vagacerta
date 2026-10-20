@@ -1,6 +1,6 @@
 # Visual audit
 
-Generated: 2026-10-20T03:26:33.705Z
+Generated: 2026-10-20T03:27:22.256Z
 
 ## desktop-full.png
 
@@ -39,6 +39,17 @@ Generated: 2026-10-20T03:26:33.705Z
 
 - Viewport: 390×844
 - Page: 390×3436
+- Overflow elements: 0
+- Small tap targets: 0
+- Tiny text nodes (<11px): 0
+- Console errors: 0
+- Failed requests: 0
+- Broken images: 0
+
+## desktop-activity-dialog.png
+
+- Viewport: 1440×1000
+- Page: 1440×2090
 - Overflow elements: 0
 - Small tap targets: 0
 - Tiny text nodes (<11px): 0
