@@ -66,3 +66,11 @@ Ainda depende de validação externa:
 - [ ] revisar mobile/teclado no ambiente publicado.
 
 Importação automática de vaga por URL e IA generativa ficam depois desse gate. IA, quando usada, deve permanecer exclusivamente no backend.
+
+## Design e QA visual
+
+- Sistema visual documentado em `DESIGN_SYSTEM.md`.
+- Tokens de cor, tipografia, espaçamento, bordas e sombras centralizados no CSS.
+- Acessibilidade cobre skip link, foco visível, labels persistentes, `aria-describedby`, redução de movimento e alvos mínimos.
+- Playwright cobre fluxo principal, PT-BR/EN, teclado, responsividade e ausência de texto menor que 11 px.
+- Snapshots automáticos cobrem desktop, mobile, diálogo de candidatura e estado em inglês.
