@@ -4,22 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f5f7f5">
+  <meta name="color-scheme" content="light">
+  <meta name="application-name" content="VagaCerta">
+  <meta name="robots" content="index,follow">
   <meta name="description" content="Organize candidaturas, acompanhe etapas, compatibilidade e próximos passos da sua busca por emprego.">
   <meta property="og:title" content="VagaCerta — Organizador de candidaturas">
   <meta property="og:description" content="Sua busca por emprego organizada em um painel simples e acionável.">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="VagaCerta">
+  <meta property="og:locale" content="pt_BR">
   <meta property="og:url" content="https://helioconde.github.io/vagacerta/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="VagaCerta — Organizador de candidaturas">
+  <meta name="twitter:description" content="Sua busca por emprego organizada em um painel simples e acionável.">
   <link rel="canonical" href="https://helioconde.github.io/vagacerta/">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <title>VagaCerta — Organizador de candidaturas</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+  <a class="skip-link" href="#main-content" data-vc-i18n="skipLink">Pular para o conteúdo</a>
   <div class="shell">
     <header class="topbar">
       <a class="brand" href="./">VagaCerta<span>.</span></a>
-      <nav class="top-actions" aria-label="Conta">
-        <div class="language-switch" aria-label="Idioma / Language"><button class="lang-button active" type="button" data-lang="pt-BR" aria-pressed="true">PT</button><button class="lang-button" type="button" data-lang="en" aria-pressed="false">EN</button></div>
+      <nav class="top-actions" aria-label="Conta" data-vc-aria-label="accountNavLabel">
+        <div class="language-switch" role="group" aria-label="Idioma / Language" data-vc-aria-label="languageLabel"><button class="lang-button active" type="button" data-lang="pt-BR" aria-pressed="true">PT</button><button class="lang-button" type="button" data-lang="en" aria-pressed="false">EN</button></div>
         <span id="sync-status" class="sync-status" role="status">Modo local</span>
         <button id="account-open" class="button ghost" type="button">Entrar / sincronizar</button>
       </nav>
@@ -30,21 +40,21 @@
       <span id="connection-banner-text">Você está offline. O modo local continua disponível.</span>
     </div>
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <section class="hero">
         <div>
-          <p class="eyebrow">ORGANIZADOR DE CANDIDATURAS</p>
+          <p class="eyebrow" data-vc-i18n="heroEyebrow">ORGANIZADOR DE CANDIDATURAS</p>
           <h1>Menos vagas perdidas.<br><span>Mais próximos passos claros.</span></h1>
-          <p class="hero-copy">Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.</p>
+          <p class="hero-copy" data-vc-i18n="heroCopy">Salve oportunidades, acompanhe cada etapa e veja rapidamente quais candidaturas precisam da sua atenção.</p>
         </div>
         <aside class="hero-stat">
-          <span>Em andamento</span>
+          <span data-vc-i18n="inProgress">Em andamento</span>
           <strong id="hero-active">0</strong>
-          <small>candidaturas ativas</small>
+          <small data-vc-i18n="activeApplications">candidaturas ativas</small>
         </aside>
       </section>
 
-      <section class="toolbar" aria-label="Filtros de candidaturas">
+      <section class="toolbar" aria-label="Filtros de candidaturas" data-vc-aria-label="filtersLabel">
         <div class="search-wrap">
           <label for="search" data-vc-i18n="searchLabel">Buscar</label>
           <input id="search" type="search" data-vc-placeholder="searchPlaceholder" placeholder="Empresa, cargo ou anotação">
@@ -66,7 +76,7 @@
         </div>
       </section>
 
-      <section class="metrics" aria-label="Resumo">
+      <section class="metrics" aria-label="Resumo" data-vc-aria-label="summaryLabel">
         <article><span data-vc-i18n="metricTotal">Total</span><strong id="metric-total">0</strong></article>
         <article><span data-vc-i18n="metricApplied">Candidatadas</span><strong id="metric-applied">0</strong></article>
         <article><span data-vc-i18n="metricInterviews">Entrevistas</span><strong id="metric-interviews">0</strong></article>
@@ -120,7 +130,7 @@
       <section class="board-section">
         <div class="section-heading board-heading">
           <div>
-            <p class="eyebrow">FUNIL DE CANDIDATURAS</p>
+            <p class="eyebrow" data-vc-i18n="boardEyebrow">FUNIL DE CANDIDATURAS</p>
             <h2 data-vc-i18n="boardTitle">Onde cada vaga está agora</h2>
           </div>
           <div class="board-heading-meta">
@@ -128,7 +138,7 @@
             <p data-vc-i18n="boardHelp">Altere o status diretamente em cada card.</p>
           </div>
         </div>
-        <nav id="board-nav" class="board-nav" aria-label="Etapas do funil"></nav>
+        <nav id="board-nav" class="board-nav" aria-label="Etapas do funil" data-vc-aria-label="boardNavLabel"></nav>
         <div id="board" class="board" aria-live="polite"></div>
       </section>
     </main>
@@ -142,10 +152,10 @@
   <dialog id="application-dialog" class="dialog" aria-labelledby="application-title">
     <div class="dialog-head">
       <div>
-        <p class="eyebrow">CANDIDATURA</p>
+        <p class="eyebrow" data-vc-i18n="applicationEyebrow">CANDIDATURA</p>
         <h2 id="application-title" data-vc-i18n="addOpportunity">Adicionar oportunidade</h2>
       </div>
-      <button class="icon-button" id="application-close" type="button" aria-label="Fechar">×</button>
+      <button class="icon-button" id="application-close" type="button" aria-label="Fechar" data-vc-aria-label="close">×</button>
     </div>
     <form id="application-form" novalidate>
       <input name="id" type="hidden">
@@ -206,10 +216,10 @@
   <dialog id="account-dialog" class="dialog account-dialog" aria-labelledby="account-title">
     <div class="dialog-head">
       <div>
-        <p class="eyebrow">SUA CONTA</p>
+        <p class="eyebrow" data-vc-i18n="accountEyebrow">SUA CONTA</p>
         <h2 id="account-title" data-vc-i18n="syncSearch">Sincronize sua busca</h2>
       </div>
-      <button class="icon-button" id="account-close" type="button" aria-label="Fechar">×</button>
+      <button class="icon-button" id="account-close" type="button" aria-label="Fechar" data-vc-aria-label="close">×</button>
     </div>
     <p class="dialog-copy" data-vc-i18n="accountHelp">Entre para acessar suas candidaturas em outros dispositivos. Seus registros continuam privados por RLS.</p>
     <form id="auth-form" novalidate>
@@ -235,7 +245,7 @@
         <p class="eyebrow" data-vc-i18n="activityEyebrow">ATIVIDADE DA CANDIDATURA</p>
         <h2 id="activity-title" data-vc-i18n="activityTitle">Resumo da atividade</h2>
       </div>
-      <button class="icon-button" id="activity-close" type="button" aria-label="Fechar">×</button>
+      <button class="icon-button" id="activity-close" type="button" aria-label="Fechar" data-vc-aria-label="close">×</button>
     </div>
     <p id="activity-subtitle" class="dialog-copy"></p>
     <ol id="activity-timeline" class="activity-timeline"></ol>
@@ -247,7 +257,7 @@
         <p class="eyebrow" data-vc-i18n="resumeVersionsEyebrow">CURRÍCULOS DA CANDIDATURA</p>
         <h2 id="documents-title" data-vc-i18n="resumeVersions">Versões personalizadas</h2>
       </div>
-      <button class="icon-button" id="documents-close" type="button" aria-label="Fechar">×</button>
+      <button class="icon-button" id="documents-close" type="button" aria-label="Fechar" data-vc-aria-label="close">×</button>
     </div>
     <p class="dialog-copy" data-vc-i18n="resumeVersionsHelp">Cada versão fica ligada a esta candidatura e nunca sobrescreve seu currículo-base.</p>
     <form id="document-form">
