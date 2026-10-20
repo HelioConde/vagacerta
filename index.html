@@ -89,6 +89,23 @@
 
       <aside class="ad-slot" aria-label="Publicidade" data-ad-slot="dashboard"><span>Publicidade</span><small>Espaço preparado para anúncios não intrusivos.</small></aside>
 
+      <section class="productivity-section panel-lite" aria-labelledby="productivity-title">
+        <div class="section-heading compact">
+          <div>
+            <p class="eyebrow" data-vc-i18n="productivityEyebrow">RITMO DA BUSCA</p>
+            <h2 id="productivity-title" data-vc-i18n="productivityTitle">O que precisa da sua atenção agora</h2>
+          </div>
+          <p data-vc-i18n="productivityHelp">Indicadores calculados com suas candidaturas atuais.</p>
+        </div>
+        <div class="productivity-grid">
+          <article><span data-vc-i18n="productivityNew">Novas em 7 dias</span><strong id="productivity-new">0</strong></article>
+          <article><span data-vc-i18n="productivityFollowUps">Follow-ups em 7 dias</span><strong id="productivity-followups">0</strong></article>
+          <article><span data-vc-i18n="productivityAdvanced">Etapas avançadas</span><strong id="productivity-advanced">0</strong></article>
+          <article><span data-vc-i18n="productivityNeedsAction">Sem próximo passo</span><strong id="productivity-needs-action">0</strong></article>
+        </div>
+        <div id="attention-list" class="attention-list" aria-live="polite"></div>
+      </section>
+
       <section class="followup-section panel-lite" aria-labelledby="followup-title">
         <div class="section-heading compact">
           <div>
@@ -210,6 +227,18 @@
       <button id="sign-out" class="button ghost full" type="button" data-vc-i18n="signOut">Sair da conta</button>
     </div>
     <p id="account-message" class="form-message" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog id="activity-dialog" class="dialog activity-dialog" aria-labelledby="activity-title">
+    <div class="dialog-head">
+      <div>
+        <p class="eyebrow" data-vc-i18n="activityEyebrow">ATIVIDADE DA CANDIDATURA</p>
+        <h2 id="activity-title" data-vc-i18n="activityTitle">Resumo da atividade</h2>
+      </div>
+      <button class="icon-button" id="activity-close" type="button" aria-label="Fechar">×</button>
+    </div>
+    <p id="activity-subtitle" class="dialog-copy"></p>
+    <ol id="activity-timeline" class="activity-timeline"></ol>
   </dialog>
 
   <dialog id="documents-dialog" class="dialog documents-dialog" aria-labelledby="documents-title">
