@@ -64,6 +64,12 @@ test("application flows through explained match, follow-up, resume and interview
 test("language switch translates the complete application and account flows", async ({ page }) => {
   await page.locator('[data-lang="en"]').click();
 
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page).toHaveTitle("VagaCerta — Job application tracker");
+  await expect(page.locator(".skip-link")).toHaveText("Skip to content");
+  await expect(page.locator(".top-actions")).toHaveAttribute("aria-label", "Account");
+  await expect(page.locator(".language-switch")).toHaveAttribute("aria-label", "Language");
+  await expect(page.locator("#board-nav")).toHaveAttribute("aria-label", "Funnel stages");
   await expect(page.getByRole("button", { name: "+ New application" })).toBeVisible();
   await expect(page.getByPlaceholder("Company, role or note")).toBeVisible();
   await expect(page.getByText("Where each opportunity stands")).toBeVisible();
@@ -76,6 +82,7 @@ test("language switch translates the complete application and account flows", as
   await expect(page.getByText("Requirement-by-requirement match")).toBeVisible();
   await expect(page.getByText("Interview preparation")).toBeVisible();
   await expect(page.getByRole("button", { name: "Save application" })).toBeVisible();
+  await expect(page.locator("#application-close")).toHaveAttribute("aria-label", "Close");
   await page.getByRole("button", { name: "Cancel" }).click();
 
   await expect(page.getByText("Follow-ups that need attention")).toBeVisible();
@@ -83,6 +90,7 @@ test("language switch translates the complete application and account flows", as
   await page.locator("#account-dialog").evaluate(dialog => dialog.showModal());
   await page.locator("#auth-form").evaluate(form => { form.hidden = false; });
   await expect(page.getByText("Sync your job search")).toBeVisible();
+  await expect(page.locator("#account-close")).toHaveAttribute("aria-label", "Close");
   await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Create account" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Forgot password" })).toBeVisible();
@@ -251,4 +259,26 @@ test("attention list opens the application for review", async ({ page }) => {
   await expect(page.locator("#application-dialog")).toBeVisible();
   await expect(page.locator('[name="company"]')).toHaveValue("Empresa Atenção");
   await expect(page.locator('[name="role"]')).toHaveValue("UX Designer");
+});
+
+
+test("release metadata files are published and parseable", async ({ request }) => {
+  const manifestResponse = await request.get("/site.webmanifest");
+  expect(manifestResponse.ok()).toBeTruthy();
+  const manifest = await manifestResponse.json();
+  expect(manifest.name).toContain("VagaCerta");
+  expect(manifest.start_url).toBe("./");
+  expect(manifest.icons?.length).toBeGreaterThan(0);
+
+  const favicon = await request.get("/favicon.svg");
+  expect(favicon.ok()).toBeTruthy();
+  expect(await favicon.text()).toContain("<svg");
+
+  const robots = await request.get("/robots.txt");
+  expect(robots.ok()).toBeTruthy();
+  expect(await robots.text()).toContain("Sitemap:");
+
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.ok()).toBeTruthy();
+  expect(await sitemap.text()).toContain("https://helioconde.github.io/vagacerta/");
 });
