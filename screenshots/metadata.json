@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T03:17:46.213Z",
+  "generatedAt": "2026-10-20T03:20:15.353Z",
   "baseUrl": "http://127.0.0.1:4173/",
   "captures": [
     {
@@ -10,7 +10,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 1440,
-      "height": 1347,
+      "height": 1645,
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
@@ -28,7 +28,43 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 390,
-      "height": 2114,
+      "height": 2710,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "desktop-populated.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 1440,
+      "height": 1792,
+      "viewportWidth": 1440,
+      "viewportHeight": 1000,
+      "overflow": [],
+      "smallTapTargets": [],
+      "tinyText": [],
+      "brokenImages": [],
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "mobile-populated.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "VagaCerta — Organizador de candidaturas",
+      "width": 390,
+      "height": 2713,
       "viewportWidth": 390,
       "viewportHeight": 844,
       "overflow": [],
@@ -46,7 +82,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 1440,
-      "height": 1347,
+      "height": 1645,
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
@@ -64,7 +100,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 390,
-      "height": 2114,
+      "height": 2710,
       "viewportWidth": 390,
       "viewportHeight": 844,
       "overflow": [],
@@ -82,7 +118,7 @@
       },
       "title": "VagaCerta — Organizador de candidaturas",
       "width": 1440,
-      "height": 1276,
+      "height": 1574,
       "viewportWidth": 1440,
       "viewportHeight": 1000,
       "overflow": [],
