@@ -117,9 +117,79 @@ async function capture(name, viewport, prepare = null) {
   };
 }
 
+async function seedDashboard(page) {
+  await page.evaluate(() => {
+    const now = Date.now();
+    const items = [
+      {
+        id:"11111111-1111-4111-8111-111111111111",
+        company:"Aurora Labs",
+        role:"Front-End Developer",
+        url:"https://example.com/aurora",
+        status:"applied",
+        matchScore:82,
+        requirements:[
+          {text:"React",status:"met"},
+          {text:"JavaScript",status:"met"},
+          {text:"TypeScript",status:"missing"},
+          {text:"Inglês avançado",status:"unknown"}
+        ],
+        salary:"R$ 4.500",
+        notes:"Revisar portfólio antes do retorno.",
+        followUpAt:"2099-10-25",
+        followUpStatus:"pending",
+        interviewPrep:{questions:[],review:[],notes:""},
+        createdAt:now-86400000,
+        updatedAt:now
+      },
+      {
+        id:"22222222-2222-4222-8222-222222222222",
+        company:"Verde Tech",
+        role:"Product Designer",
+        url:"",
+        status:"interview",
+        matchScore:91,
+        requirements:[
+          {text:"Figma",status:"met"},
+          {text:"Design systems",status:"met"},
+          {text:"Pesquisa",status:"met"}
+        ],
+        salary:"",
+        notes:"Entrevista técnica agendada.",
+        followUpAt:"2099-10-28",
+        followUpStatus:"pending",
+        interviewPrep:{questions:["Conte um case"],review:["Design system"],notes:""},
+        createdAt:now-172800000,
+        updatedAt:now
+      },
+      {
+        id:"33333333-3333-4333-8333-333333333333",
+        company:"Norte Digital",
+        role:"UX Engineer",
+        url:"",
+        status:"saved",
+        matchScore:null,
+        requirements:[],
+        salary:"",
+        notes:"",
+        followUpAt:"",
+        followUpStatus:"pending",
+        interviewPrep:{questions:[],review:[],notes:""},
+        createdAt:now-259200000,
+        updatedAt:now
+      }
+    ];
+    localStorage.setItem("vagacerta-applications-v2", JSON.stringify(items));
+  });
+  await page.reload({ waitUntil:"domcontentloaded" });
+  await page.waitForTimeout(300);
+}
+
 const captures = [
   await capture("desktop-full.png", { width: 1440, height: 1000 }),
   await capture("mobile-full.png", { width: 390, height: 844 }),
+  await capture("desktop-populated.png", { width: 1440, height: 1000 }, seedDashboard),
+  await capture("mobile-populated.png", { width: 390, height: 844 }, seedDashboard),
   await capture("desktop-application-dialog.png", { width: 1440, height: 1000 }, async page => {
     await page.getByRole("button", { name: "+ Nova candidatura" }).click();
   }),
