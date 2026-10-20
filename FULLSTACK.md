@@ -37,7 +37,14 @@ Dados privados são protegidos por RLS.
 - preparação de entrevista com perguntas, revisão e notas;
 - layout responsivo;
 - Browser E2E do fluxo principal;
-- workflows QA e GitHub Pages.
+- workflows QA e GitHub Pages;
+- onboarding e estado vazio orientado à ação;
+- navegação mobile do funil;
+- produtividade e lista automática de atenção;
+- resumo de atividade por candidatura;
+- validação inline acessível;
+- suporte explícito a offline/loading/erro;
+- metadata de publicação com manifest, favicon, robots e sitemap.
 
 ## Diferenciais do gate
 
@@ -65,14 +72,15 @@ Isolamento RLS, duplicidade, URLs inválidas, troca de status, score 0–100, mo
 
 - [x] os quatro diferenciais acima implementados no modo local;
 - [x] schema, grants e políticas necessários para persistência/sincronização autenticada estão aplicados;
-- [ ] RLS de documentos e candidaturas validada entre dois usuários;
+- [ ] RLS de documentos e candidaturas validada entre dois usuários reais;
 - [x] PT-BR/EN cobrem painel, formulário, autenticação e novos fluxos;
-- [ ] mobile e teclado utilizáveis no ambiente publicado;
-- [x] Browser E2E cobre criação → candidatura → follow-up → currículo → entrevista;
-- [ ] GitHub Pages publicado; CI de código está verde, mas o deploy exige habilitar uma vez `Settings > Pages > Source: GitHub Actions`;
-- [ ] nenhum P0/P1 conhecido.
+- [x] mobile e teclado cobertos no Browser E2E e nos snapshots automatizados;
+- [x] Browser E2E cobre criação → candidatura → follow-up → currículo → entrevista, validação, offline, produtividade e atividade;
+- [x] GitHub Pages habilitado e workflow de deploy verde;
+- [x] Static QA, Live Update QA e Visual Snapshot verdes;
+- [x] nenhum P0/P1 de código conhecido.
 
-Até cumprir esse gate, VagaCerta é **produto em desenvolvimento**, não MVP finalizado.
+O VagaCerta está em **MVP release candidate**. O único gate externo ainda recomendado para release estável é validar isolamento entre duas contas reais.
 
 
 ## Hardening de segurança — 20/10/2026
