@@ -1,4 +1,24 @@
-# VagaCerta
+# VagaCerta — Organize candidaturas de emprego
+
+**Um espaço para acompanhar vagas, entrevistas, propostas e próximos contatos em um único fluxo.**
+
+[**Abrir aplicativo**](https://helioconde.github.io/vagacerta/) · [**Arquitetura full-stack**](FULLSTACK.md) · [**Design system**](DESIGN_SYSTEM.md)
+
+![JavaScript](https://img.shields.io/badge/JavaScript-frontend-F7DF1E?logo=javascript&logoColor=black) ![Supabase](https://img.shields.io/badge/Supabase-auth%20%2B%20dados-3FCF8E?logo=supabase&logoColor=white) ![Status](https://img.shields.io/badge/status-release%20candidate-64748b)
+
+## Em resumo
+
+- **Central de candidaturas:** cadastro, pesquisa e funil de etapas.
+- **Acompanhamento:** follow-ups, preparação para entrevistas e produtividade.
+- **Modo local:** permite experimentar sem depender da sincronização.
+- **Sincronização opcional:** autenticação Supabase e dados por conta, conforme a configuração.
+- **Qualidade:** testes de interface e regressões documentados neste repositório.
+
+**Para contribuir:** clone o repositório, execute `npm install` e `npm run check`. Use `npm run test:e2e` para os cenários de navegador.
+
+> O projeto está em fase de validação. Antes de uso amplo com contas reais, é importante reproduzir o teste de isolamento entre usuários descrito abaixo.
+
+---
 
 Organizador de candidaturas com funil, produtividade, follow-ups, compatibilidade explicada e sincronização.
 
