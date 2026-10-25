@@ -1,101 +1,73 @@
-# VagaCerta — Organize candidaturas de emprego
+<div align="center">
 
-**Um espaço para acompanhar vagas, entrevistas, propostas e próximos contatos em um único fluxo.**
+<h1>💼 VagaCerta</h1>
 
-[**Abrir aplicativo**](https://helioconde.github.io/vagacerta/) · [**Arquitetura full-stack**](FULLSTACK.md) · [**Design system**](DESIGN_SYSTEM.md)
+<strong>Um lugar para acompanhar sua busca por emprego do começo ao próximo passo</strong>
 
-![JavaScript](https://img.shields.io/badge/JavaScript-frontend-F7DF1E?logo=javascript&logoColor=black) ![Supabase](https://img.shields.io/badge/Supabase-auth%20%2B%20dados-3FCF8E?logo=supabase&logoColor=white) ![Status](https://img.shields.io/badge/status-release%20candidate-64748b)
+<p>Organize candidaturas, entrevistas, currículos personalizados e contatos de acompanhamento sem depender de planilhas dispersas.</p>
 
-## Em resumo
+<a href="https://helioconde.github.io/vagacerta/"><img alt="Aplicativo Web" src="https://img.shields.io/badge/ABRIR-APLICATIVO%20WEB-2563eb?style=for-the-badge"></a>
+<a href="https://github.com/HelioConde/vagacerta"><img alt="Release candidate" src="https://img.shields.io/badge/STATUS-RELEASE%20CANDIDATE-64748b?style=for-the-badge"></a>
 
-- **Central de candidaturas:** cadastro, pesquisa e funil de etapas.
-- **Acompanhamento:** follow-ups, preparação para entrevistas e produtividade.
-- **Modo local:** permite experimentar sem depender da sincronização.
-- **Sincronização opcional:** autenticação Supabase e dados por conta, conforme a configuração.
-- **Qualidade:** testes de interface e regressões documentados neste repositório.
+<p><a href="https://helioconde.github.io/vagacerta/"><strong>Experimentar</strong></a> · <a href="FULLSTACK.md"><strong>Arquitetura</strong></a> · <a href="DESIGN_SYSTEM.md"><strong>Design system</strong></a></p>
 
-**Para contribuir:** clone o repositório, execute `npm install` e `npm run check`. Use `npm run test:e2e` para os cenários de navegador.
-
-> O projeto está em fase de validação. Antes de uso amplo com contas reais, é importante reproduzir o teste de isolamento entre usuários descrito abaixo.
+</div>
 
 ---
 
-Organizador de candidaturas com funil, produtividade, follow-ups, compatibilidade explicada e sincronização.
+## A proposta
 
-## Status
+A busca por uma vaga envolve muitos detalhes: empresas, datas, retornos, entrevistas e versões diferentes do currículo. **VagaCerta** reúne essas informações em um funil visual que deixa claro o próximo passo.
 
-> **MVP em release candidate.** A interface, os principais fluxos de produto, o QA automatizado, os snapshots visuais e o deploy via GitHub Pages estão ativos e verdes. A única validação externa importante ainda aberta é o teste real de isolamento entre duas contas autenticadas.
+**Estado:** MVP em *release candidate*, com base funcional e validações externas ainda necessárias antes de considerar o lançamento estável.
 
-- frontend próprio em HTML, CSS e JavaScript;
-- modo local funcional inclusive offline;
-- Supabase Auth e sincronização por conta;
-- banco compartilhado `pizzaria-db`;
-- RLS e grants endurecidos nos dados privados;
-- GitHub Pages em `https://helioconde.github.io/vagacerta/`;
-- CI com Static QA, Browser E2E, Live Update QA e snapshots visuais;
-- PT-BR e inglês;
-- manifest, favicon, robots e sitemap para publicação.
+## O que é possível organizar
 
-## Principais recursos
+- **Candidaturas:** criar, editar, localizar e filtrar oportunidades.
+- **Funil:** Salva → Candidatada → Entrevista → Proposta ou Encerrada.
+- **Próximas ações:** acompanhar follow-ups atrasados, concluir e adiar contatos.
+- **Entrevistas:** manter orientações e anotações de preparação.
+- **Currículos:** organizar versões direcionadas a diferentes oportunidades.
+- **Produtividade:** indicadores, resumos e itens que exigem atenção.
+- **Acesso:** modo local e sincronização opcional mediante conta e backend configurado.
 
-- CRUD de candidaturas;
-- funil Salva → Candidatada → Entrevista → Proposta/Encerrada;
-- busca, filtro e limpeza de filtros;
-- compatibilidade explicada por requisito;
-- follow-ups com atraso, concluir e adiar;
-- preparação de entrevista;
-- versões personalizadas de currículo;
-- onboarding e estado vazio;
-- indicadores de produtividade e lista de atenção;
-- resumo de atividade por candidatura;
-- estados offline, loading e erro;
-- validação inline acessível;
-- layout responsivo e navegação mobile do funil.
+## Local ou sincronizado?
 
-## Arquivos principais
+| Modo | Como funciona |
+| --- | --- |
+| **Local** | Permite experimentar o produto sem criar uma conta |
+| **Conta Supabase** | Autenticação e dados sincronizados, sujeitos à configuração e às políticas RLS |
+| **Offline** | Possibilidades e limites de uso sem rede dependem do fluxo em questão |
 
-- `index.html`
-- `style.css`
-- `app.js`
-- `supabase-config.js`
-- `FULLSTACK.md`
-- `DESIGN_SYSTEM.md`
-
-## Backend
-
-Este projeto usa o Supabase compartilhado `pizzaria-db`. A chave no frontend é uma **publishable key**. Nunca coloque `service_role` ou segredos administrativos no navegador.
-
-As migrations do VagaCerta ficam em `supabase/migrations/`. O hardening atual remove acesso `anon`, restringe `authenticated` a CRUD e mantém ownership/RLS nos registros privados.
+> **Proteção dos dados:** antes do uso amplo com contas reais, ainda é necessário reproduzir a validação do isolamento entre usuários e dispositivos.
 
 ## Desenvolvimento
 
-Sirva a raiz do repositório por HTTP e use:
+O frontend é implementado em **HTML, CSS e JavaScript**, com integração Supabase e testes de navegador.
 
 ```bash
+git clone https://github.com/HelioConde/vagacerta.git
+cd vagacerta
 npm install
 npm run check
 npm run test:e2e
-npm run screenshots
 ```
 
-## Gate de release
+O projeto pode ser servido como site estático, por exemplo com `python -m http.server 8000` na raiz. Os testes Playwright exigem instalação dos navegadores correspondentes.
 
-Concluído:
+### Principais arquivos
 
-- [x] compatibilidade explicada por requisito;
-- [x] currículos personalizados por candidatura;
-- [x] fila de follow-up;
-- [x] preparação de entrevista;
-- [x] produtividade e resumo de atividade;
-- [x] estados loading/erro/offline;
-- [x] PT-BR/EN e ARIA localizado;
-- [x] teclado e responsividade cobertos por Playwright;
-- [x] QA, Static QA, Live Update QA e snapshots visuais verdes;
-- [x] GitHub Pages habilitado e workflow de deploy verde;
-- [x] manifest, favicon, robots e sitemap.
+`index.html` · `style.css` · `app.js` · `supabase-config.js` · `FULLSTACK.md` · `DESIGN_SYSTEM.md`.
 
-Validação externa ainda recomendada antes de tratar o produto como release estável:
+## Critérios antes do lançamento estável
 
-- [ ] testar duas contas reais e confirmar isolamento RLS entre usuários/dispositivos.
+- Interface e fluxos essenciais: **desenvolvidos**, com QA documentado.
+- GitHub Pages e workflow: **configurados**.
+- Isolamento real entre duas contas autenticadas: **validação externa recomendada**.
+- Integrações futuras e IA generativa: **fora do escopo de lançamento atual**.
 
-Importação automática de vaga por URL e IA generativa ficam fora do gate atual. IA, quando usada, deve permanecer exclusivamente no backend.
+[Documentação do backend](FULLSTACK.md) · [Padrões de interface](DESIGN_SYSTEM.md) · [README técnico anterior](docs/README_HISTORY_2026-10-25.md)
+
+---
+
+<div align="center"><strong>Desenvolvido por <a href="https://github.com/HelioConde">Hélio Conde</a></strong></div>
